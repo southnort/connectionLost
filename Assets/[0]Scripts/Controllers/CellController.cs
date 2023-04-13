@@ -11,7 +11,7 @@ namespace ConnectionLost.Controllers
 
         public void HandleClick()
         {
-
+            View.Click();
         }
     }
 }
