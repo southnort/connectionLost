@@ -7,5 +7,11 @@ namespace ConnectionLost.Controllers
     {
         public CellModel Model { get; set; }
         public CellView View { get; set; }
+
+
+        public void HandleClick()
+        {
+
+        }
     }
 }

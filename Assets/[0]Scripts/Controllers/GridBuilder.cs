@@ -12,6 +12,7 @@ namespace ConnectionLost.Controllers
     {
         [SerializeField] private CellView cellPrefab;
         [SerializeField] private Line linePrefab;
+        [SerializeField] private GridController gridController;
 
         private Dictionary<HexCoordinates, CellController> _drawableCells;
 
@@ -34,10 +35,11 @@ namespace ConnectionLost.Controllers
             _drawableCells = new Dictionary<HexCoordinates, CellController>();
 
             var generator = new GridGenerator();
-            var stats = new GridStats(5, 10, 15);
+            var stats = new GridStats(5, 10, 40);
             var grid = generator.GenerateRandomGrid(stats);
 
             DrawGrid(grid);
+            gridController.SetCells(_drawableCells);
         }
 
         public void DrawGrid(GridModel gridModel)
@@ -65,6 +67,7 @@ namespace ConnectionLost.Controllers
 
             var cell = Instantiate(cellPrefab, transform);
             cell.transform.localPosition = pos;
+            cell.SetLabel(model.Coordinates.ToString());
 
             var controller = new CellController
             {
