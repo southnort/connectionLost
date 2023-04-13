@@ -28,24 +28,10 @@ namespace ConnectionLost.Core
             var tempMod = position.x / (GameConfig.InnerRadius * 2f);
             var x = tempMod - (y % 2 * 0.5f);
 
-
-
             var iX = Mathf.RoundToInt(x);
             var iY = Mathf.RoundToInt(y);
 
             return new HexCoordinates(iX, iY);
-
-            //var x = position.x / (GameConfig.InnerRadius * 2f);
-            //var y = -x;
-            //var offset = position.z / (GameConfig.OuterRadius * 3f);
-            //x -= offset;
-            //y -= offset;
-
-            //var iX = Mathf.RoundToInt(x);
-            //var iY = Mathf.RoundToInt(y);
-            //var iZ = Mathf.RoundToInt(-x - y);
-
-            //return new HexCoordinates(iX, iZ);
         }
 
 

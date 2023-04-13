@@ -67,7 +67,6 @@ namespace ConnectionLost.Controllers
 
             var cell = Instantiate(cellPrefab, transform);
             cell.transform.localPosition = pos;
-            cell.SetLabel(model.Coordinates.ToString());
 
             var controller = new CellController
             {
