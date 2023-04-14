@@ -145,3 +145,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineRenderer: {fileID: 324138234557195209}
+  colorConfig: {fileID: 11400000, guid: d3914aa2996114e4fb15670fc29dac61, type: 2}

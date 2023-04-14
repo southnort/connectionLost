@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ConnectionLost.Core;
 using ConnectionLost.Models;
 using Yrr.Core;
@@ -83,12 +84,14 @@ namespace ConnectionLost.Controllers
                 if (!result.Contains(curCell))
                 {
                     result.Add(curCell);
+                    curCell.CurrentState = CellStates.Closed;
                     countOfCells--;
                 }
 
                 curCell = curCell.GetRandomNeighbour();
             }
 
+            result.Last().CurrentState = CellStates.Open;
 
             foreach (var c in cells)
             {

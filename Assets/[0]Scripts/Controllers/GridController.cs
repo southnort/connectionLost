@@ -40,12 +40,9 @@ namespace ConnectionLost.Controllers
             _cells[coords].HandleClick();
         }
 
-
         internal void SetCells(Dictionary<HexCoordinates, CellController> cells)
         {
             _cells = cells;
         }
-
-
     }
 }
