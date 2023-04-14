@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace ConnectionLost.Views
 {
-
     [CreateAssetMenu(fileName = "ColorConfig", menuName = "Configs/Color config", order = 1)]
     internal sealed class ColorConfig : ScriptableObject
     {

@@ -1,7 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using ConnectionLost.Core;
 using DG.Tweening;
-using ConnectionLost.Core;
+using UnityEngine;
 using UnityEngine.UI;
 
 
@@ -19,7 +18,7 @@ namespace ConnectionLost.Views
             if (state == _currentState) return;
             _currentState = state;
 
-            DOTween.Kill(baseImage);
+            StopAllTweens();
 
             switch (_currentState)
             {
@@ -41,9 +40,14 @@ namespace ConnectionLost.Views
             }
         }
 
-        private void OnDestroy()
+        private void StopAllTweens()
         {
             DOTween.Kill(baseImage);
+        }
+
+        private void OnDestroy()
+        {
+            StopAllTweens();
         }
     }
 }

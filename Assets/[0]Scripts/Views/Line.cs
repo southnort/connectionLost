@@ -25,7 +25,7 @@ namespace ConnectionLost.Views
             if (state == _currentState) return;
             _currentState = state;
 
-            DOTween.Kill(lineRenderer.material);
+            StopAllTweens();
 
             switch (_currentState)
             {
@@ -47,9 +47,14 @@ namespace ConnectionLost.Views
             }
         }
 
-        void OnDestroy()
+        private void StopAllTweens()
         {
             DOTween.Kill(lineRenderer.material);
+        }
+
+        private void OnDestroy()
+        {
+            StopAllTweens();
         }
     }
 }

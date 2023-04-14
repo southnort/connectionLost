@@ -15,7 +15,7 @@ namespace ConnectionLost.Controllers
         [SerializeField] private GridController gridController;
 
         private Dictionary<HexCoordinates, CellController> _controllersMap;
-        private HashSet<LineKey> _keysForLines;
+        private Dictionary<LineKey, Line> _linesMap;
 
         private void Awake()
         {
@@ -34,14 +34,14 @@ namespace ConnectionLost.Controllers
         {
             transform.ClearChildren();
             _controllersMap = new Dictionary<HexCoordinates, CellController>();
-            _keysForLines = new HashSet<LineKey>();
+            _linesMap = new Dictionary<LineKey, Line>();
 
             var generator = new GridGenerator();
-            var stats = new GridStats(5, 10, 40);
+            var stats = new GridStats(5, 10, 30);
             var grid = generator.GenerateRandomGrid(stats);
 
             DrawGrid(grid);
-            gridController.SetCells(_controllersMap);
+            gridController.Initialize(_controllersMap, _linesMap);
         }
 
         public void DrawGrid(GridModel gridModel)
@@ -53,25 +53,10 @@ namespace ConnectionLost.Controllers
 
             foreach (var cell in gridModel.Cells)
             {
-                foreach (var n in cell.GetNeighboursList())
-                {
-                    if (n == null) continue;
-                    _controllersMap[cell.Coordinates].NeighbourCells
-                        .Add(_controllersMap[n.Coordinates]);
-                }
-            }
-
-            foreach (var cell in gridModel.Cells)
-            {
                 CreateLines(cell);
-            }
-
-            foreach (var controller in _controllersMap.Values)
-            {
-                controller.UpdateViews();
-            }
+            }          
         }
-
+      
         private void CreateCell(CellModel model)
         {
             var x = model.Coordinates.X;
@@ -103,39 +88,17 @@ namespace ConnectionLost.Controllers
                 var key1 = new LineKey(cell.Coordinates, other.Coordinates);
                 var key2 = new LineKey(other.Coordinates, cell.Coordinates);
 
-                if (_keysForLines.Contains(key1) || _keysForLines.Contains(key2)) continue;
-
-                _keysForLines.Add(key1);
-                _keysForLines.Add(key2);
+                if (_linesMap.ContainsKey(key1) || _linesMap.ContainsKey(key2)) continue;
 
                 var line = Instantiate(linePrefab, transform);
-                var pos1 = _controllersMap[cell.Coordinates].View.transform.position;
-                var pos2 = _controllersMap[other.Coordinates].View.transform.position;
+                _linesMap.Add(key1, line);
+                _linesMap.Add(key2, line);
 
-                _controllersMap[cell.Coordinates].Lines.Add(line);
-                _controllersMap[other.Coordinates].Lines.Add(line);
+                var pos1 = _controllersMap[cell.Coordinates].View.transform.position;
+                var pos2 = _controllersMap[other.Coordinates].View.transform.position;               
 
                 line.SetLine(pos1, pos2);
             }
         }
-
-        private readonly struct LineKey
-        {
-            private readonly HexCoordinates _coords1;
-
-            private readonly HexCoordinates _coords2;
-
-            public LineKey(HexCoordinates hc1, HexCoordinates hc2)
-            {
-                _coords1 = hc1;
-                _coords2 = hc2;
-            }
-
-            public override string ToString()
-            {
-                return $"{_coords1} {_coords2}";
-            }
-        }
-
     }
 }
