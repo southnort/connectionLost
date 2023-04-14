@@ -37,7 +37,7 @@ namespace ConnectionLost.Controllers
             _linesMap = new Dictionary<LineKey, Line>();
 
             var generator = new GridGenerator();
-            var stats = new GridStats(5, 10, 30);
+            var stats = new GridStats(5, 10, 50);
             var grid = generator.GenerateRandomGrid(stats);
 
             DrawGrid(grid);
