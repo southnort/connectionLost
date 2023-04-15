@@ -87,14 +87,14 @@ namespace ConnectionLost.Controllers
                 if (!result.Contains(curCell))
                 {
                     result.Add(curCell);
-                    curCell.CurrentState = CellStates.Closed;
+                    curCell.SetNewState(CellStates.Closed);
                     countOfCells--;
                 }
 
                 curCell = curCell.GetRandomNeighbour();
             }
 
-            result.Last().CurrentState = CellStates.Open;
+            result.Last().SetNewState(CellStates.Opened);
 
             foreach (var c in cells)
             {
@@ -118,7 +118,7 @@ namespace ConnectionLost.Controllers
             while (countOfEnemies > 0)
             {
                 var cell = cells.GetRandomItem();
-                if (cell.CellContent == null)
+                if (cell.CellContent == null && cell.CurrentState != CellStates.Opened)
                 {
                     cell.CellContent = enemyFactory.CreateEnemy(gridStats.Difficult);
                     countOfEnemies--;

@@ -12,17 +12,43 @@ namespace ConnectionLost.Models
     {
         private readonly CellModel[] _neighbours = new CellModel[6];
 
-
         public HexCoordinates Coordinates { get; set; }
-        public CellStates CurrentState { get; set; }
+        public CellStates CurrentState { get; private set; }
         public ICellContent CellContent { get; set; }
-        public int BlocksCount { get; set; }
+        public int BlocksCount { get; private set; }
+
+        public event Action OnCellStateChanged;
 
 
-
-        public List<CellModel> GetNeighboursList()
+        public void SetNewState(CellStates newState)
         {
-            return _neighbours.ToList();
+            if (newState == CurrentState || CurrentState == CellStates.Empty) return;
+            CurrentState = newState;
+
+            if (IsBlocked()) return;
+            OnCellStateChanged?.Invoke();
+        }
+
+        public void SetBlock()
+        {
+            BlocksCount++;
+
+            if (BlocksCount == 1 && CurrentState != CellStates.Empty)
+                OnCellStateChanged?.Invoke();
+        }
+
+        public void SetUnblock()
+        {
+            if (BlocksCount < 1) return;
+            BlocksCount--;
+
+            if (BlocksCount == 0 && CurrentState != CellStates.Empty)
+                OnCellStateChanged?.Invoke();
+        }
+
+        public IEnumerable<CellModel> GetNeighboursList()
+        {
+            return _neighbours.Where(x => x != null);
         }
 
         public CellModel GetNeighbour(HexDirection direction)
@@ -38,7 +64,7 @@ namespace ConnectionLost.Models
         public void SetNeighbour(HexDirection direction, CellModel cell)
         {
             if (cell == null) return;
-            
+
             _neighbours[(int)direction] = cell;
             cell._neighbours[(int)direction.Opposite()] = this;
         }
@@ -53,6 +79,20 @@ namespace ConnectionLost.Models
                 _neighbours[i]._neighbours[(int)direction.Opposite()] = null;
                 _neighbours[i] = null;
             }
+        }
+
+        public bool IsBlocked()
+        {
+            if(CurrentState == CellStates.Empty) return false;
+            if (CurrentState == CellStates.HaveContent && !CellContent.IsCanBlocked)
+                return false;
+
+            return BlocksCount > 0;
+        }
+
+        public bool IsBlockerContent()
+        {
+            return (CurrentState == CellStates.HaveContent && CellContent.IsBlock);
         }
     }
 }

@@ -16,8 +16,8 @@ namespace ConnectionLost.Models
 
         public void TakeDamage(float damage)
         {
-            Dmg -= damage;
-            OnHealthChanged?.Invoke(Dmg);
+            Hp -= damage;
+            OnHealthChanged?.Invoke(Hp);
         }
     }
 }

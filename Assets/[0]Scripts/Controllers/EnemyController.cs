@@ -5,7 +5,7 @@ using Yrr.Core;
 
 namespace ConnectionLost.Controllers
 {
-    public sealed class EnemyController : IDisposable
+    public sealed class EnemyController : IContentController
     {
         private readonly EnemyView _view;
         private readonly EnemyBase _model;
@@ -28,6 +28,7 @@ namespace ConnectionLost.Controllers
 
         public void Dispose()
         {
+            UnityEngine.Object.Destroy(_view.gameObject);
             _model.OnHealthChanged -= OnHpChanged;
         }
     }

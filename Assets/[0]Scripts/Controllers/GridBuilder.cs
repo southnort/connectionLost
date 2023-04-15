@@ -9,12 +9,11 @@ namespace ConnectionLost.Controllers
 {
     internal sealed class GridBuilder : MonoBehaviour
     {
-        [SerializeField] private CellView cellPrefab;
-        [SerializeField] private Line linePrefab;
+        [SerializeField] private GridElementsSpawner spawner;
         [SerializeField] private GridController gridController;
 
         private Dictionary<HexCoordinates, CellController> _controllersMap;
-        private Dictionary<LineKey, Line> _linesMap;
+        private Dictionary<LineKey, LineController> _linesMap;
 
         private void Awake()
         {
@@ -33,7 +32,7 @@ namespace ConnectionLost.Controllers
         {
             transform.ClearChildren();
             _controllersMap = new Dictionary<HexCoordinates, CellController>();
-            _linesMap = new Dictionary<LineKey, Line>();
+            _linesMap = new Dictionary<LineKey, LineController>();
 
             var generator = new GridGenerator();
             var stats = new GridStats(5, 10)
@@ -61,15 +60,11 @@ namespace ConnectionLost.Controllers
 
         private void CreateCell(CellModel model)
         {
-            var cell = Instantiate(cellPrefab, transform);
+            var cell = spawner.CreateCell();
+            cell.transform.SetParent(transform, false);
             cell.transform.localPosition = model.Coordinates.ToVector3();
 
-            var controller = new CellController
-            {
-                Model = model,
-                View = cell
-            };
-
+            var controller = new CellController(model, cell);
             _controllersMap.Add(model.Coordinates, controller);
         }
 
@@ -79,19 +74,14 @@ namespace ConnectionLost.Controllers
             {
                 if (other == null) continue;
 
-                var key1 = new LineKey(cell.Coordinates, other.Coordinates);
-                var key2 = new LineKey(other.Coordinates, cell.Coordinates);
+                var key = new LineKey(cell.Coordinates, other.Coordinates);
+                if (_linesMap.ContainsKey(key)) continue;
 
-                if (_linesMap.ContainsKey(key1) || _linesMap.ContainsKey(key2)) continue;
+                var line = spawner.CreateLine();
+                line.transform.SetParent(transform, false);
 
-                var line = Instantiate(linePrefab, transform);
-                _linesMap.Add(key1, line);
-                _linesMap.Add(key2, line);
-
-                var pos1 = _controllersMap[cell.Coordinates].View.transform.position;
-                var pos2 = _controllersMap[other.Coordinates].View.transform.position;
-
-                line.SetLine(pos1, pos2);
+                var controller = new LineController(cell,other, line);
+                _linesMap.Add(key, controller);
             }
         }
     }

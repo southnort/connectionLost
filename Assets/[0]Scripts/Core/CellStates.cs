@@ -4,11 +4,9 @@ namespace ConnectionLost.Core
 {
     public enum CellStates
     {
-        Undefined,
         Closed,
-        Open,
-        Blocked,
+        Opened,
+        HaveContent,
         Empty,
-        Enemy,
     }
 }

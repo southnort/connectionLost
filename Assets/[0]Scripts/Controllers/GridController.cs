@@ -1,6 +1,6 @@
 using ConnectionLost.Core;
 using ConnectionLost.Models;
-using ConnectionLost.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -13,111 +13,66 @@ namespace ConnectionLost.Controllers
         [SerializeField] private EnemiesSpawner enemySpawner;
 
         private Dictionary<HexCoordinates, CellController> _cells;
-        private Dictionary<LineKey, Line> _linesMap;
-        private Camera _camera;
-        private readonly List<EnemyController> _enemies = new();
+        private Dictionary<LineKey, LineController> _lines;
+        private Dictionary<HexCoordinates, IContentController> _contents;
+        private PlayerModel _player = new PlayerModel();
 
-        private void Awake()
+        internal void Initialize(Dictionary<HexCoordinates, CellController> controllersMap, Dictionary<LineKey, LineController> linesMap)
         {
-            _camera = Camera.main;
+            _cells = controllersMap;
+            _lines = linesMap;
+            _contents = new();
         }
 
-        private void Update()
+        internal void ClickOnCell(HexCoordinates coords)
         {
-            if (Input.GetMouseButtonDown(0))
+            var result = _cells[coords].ClickOnCell(_player);
+            HandleClickResult(coords, result);
+        }
+
+        private void HandleClickResult(HexCoordinates clickedCellCoords, ClickResult result)
+        {
+            if (!result.NeedUpdate) return;
+
+            if (_contents.ContainsKey(clickedCellCoords) && result.CellContent == null)
             {
-                HandleInput();
+                _contents[clickedCellCoords].Dispose();
+                _contents.Remove(clickedCellCoords);
             }
-        }
 
-        internal void Initialize(Dictionary<HexCoordinates, CellController> cells, Dictionary<LineKey, Line> lines)
-        {
-            _cells = cells;
-            _linesMap = lines;
-
-            foreach (var cell in _cells)
+            if (result.CellContent != null && !_contents.ContainsKey(clickedCellCoords))
             {
-                UpdateCell(cell.Key);
-            }
-        }
-        private void UpdateCell(HexCoordinates coords)
-        {
-            var cell = _cells[coords];
-            cell.UpdateState();
-            foreach (var neighbour in cell.Model.GetNeighboursList())
-            {
-                if (neighbour == null) continue;
-                UpdateLine(cell.Model, neighbour);
+                ShowContent(clickedCellCoords, result.CellContent);
             }
         }
 
-        private void UpdateLine(CellModel cell1, CellModel cell2)
+        private void ShowContent(HexCoordinates coords, ICellContent content)
         {
-            var line = _linesMap[new LineKey(cell1.Coordinates, cell2.Coordinates)];
-            if (cell1.CurrentState == cell2.CurrentState)
-                line.SetState(cell1.CurrentState);
-            else if (cell1.CurrentState == CellStates.Blocked || cell2.CurrentState == CellStates.Blocked)
+            if (content is EnemyBase)
             {
-                line.SetState(CellStates.Blocked);
-            }
-            else
-            {
-                line.SetState(CellStates.Open);
+                var view = enemySpawner.CreateView(content);
+                view.transform.position = coords.ToVector3();
+
+                var controller = new EnemyController(view, content as EnemyBase);
+                _contents.Add(coords, controller);
             }
         }
 
-
-
-        private void HandleInput()
+        private void OnDestroy()
         {
-            Ray inputRay = _camera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(inputRay, out var hit))
+            foreach (var cell in _cells.Values)
             {
-                TouchCell(hit.collider.transform.position);
-            }
-        }
-
-        private void TouchCell(Vector3 pos)
-        {
-            pos = transform.InverseTransformPoint(pos);
-            var coords = HexCoordinates.FromPosition(pos);
-
-
-            var cell = _cells[coords].Model;
-            if (cell.CurrentState == CellStates.Open)
-            {
-                OpenCell(cell);
-            }
-        }
-
-        private void OpenCell(CellModel cell)
-        {
-            if (cell.CellContent == null)
-            {
-                cell.CurrentState = CellStates.Empty;
-                UpdateCell(cell.Coordinates);
-
-                foreach (var neighbour in cell.GetNeighboursList().Where(neighbour => neighbour != null))
-                {
-                    if (neighbour.CurrentState == CellStates.Closed)
-                    {
-                        neighbour.CurrentState = CellStates.Open;
-                    }
-
-                    UpdateCell(neighbour.Coordinates);
-                }
+                cell.Dispose();
             }
 
-            else
+            foreach (var line in _lines.Values)
             {
-                if (cell.CellContent is not EnemyBase) return;
-                var enemy = enemySpawner.CreateView(cell.CellContent);
-                enemy.transform.position = cell.Coordinates.ToVector3();
-                var controller = new EnemyController(enemy, cell.CellContent as EnemyBase);
-                _enemies.Add(controller);
+                line.Dispose();
+            }
 
-                cell.CurrentState = CellStates.Enemy;
-                UpdateCell(cell.Coordinates);
+            foreach (var content in _contents.Values)
+            {
+                content.Dispose();
             }
         }
     }

@@ -1,17 +1,122 @@
-﻿using ConnectionLost.Models;
+﻿using ConnectionLost.Core;
+using ConnectionLost.Models;
 using ConnectionLost.Views;
+using System;
+using UnityEngine;
+
 
 namespace ConnectionLost.Controllers
 {
-    internal sealed class CellController
+    internal sealed class CellController : IDisposable
     {
-        public CellModel Model { get; set; }
-        public CellView View { get; set; }
+        private CellModel _model;
+        private CellView _view;
 
-
-        public void UpdateState()
+        public CellController(CellModel model, CellView view)
         {
-            View.SetState(Model.CurrentState);
-        }       
+            _model = model;
+            _view = view;
+
+            _model.OnCellStateChanged += UpdateVisual;
+            UpdateVisual();
+        }
+
+        private void UpdateVisual()
+        {
+            Debug.Log("UpdateCellState");
+
+            if (_model.CurrentState == CellStates.Empty)
+                _view.SetEmpty();
+
+            else if (_model.IsBlocked())
+            {
+                _view.SetBlocked();
+            }
+
+            else
+            {
+                switch (_model.CurrentState)
+                {
+                    case CellStates.Opened:
+                        _view.SetOpened();
+                        break;
+
+                    case CellStates.Closed:
+                        _view.SetClosed();
+                        break;
+
+                    case CellStates.HaveContent:
+                        _view.SetOpened();
+                        break;
+                }
+            }
+        }
+
+        public ClickResult ClickOnCell(PlayerModel player)
+        {
+            var result = new ClickResult();
+
+            if (!_model.IsBlocked())
+            {
+                if (_model.CurrentState == CellStates.Opened)
+                {
+                    OpenCell(result);
+                }
+
+                else if (_model.CurrentState == CellStates.HaveContent)
+                {
+                    HandleContent(player, result);
+                }
+            }
+
+            return result;
+        }
+
+        private void OpenCell(ClickResult result)
+        {
+            if (_model.CellContent != null)
+                _model.SetNewState(CellStates.HaveContent);
+            else
+                _model.SetNewState(CellStates.Empty);
+
+            foreach (var neighbor in _model.GetNeighboursList())
+            {
+                neighbor.SetNewState(CellStates.Opened);
+                if (_model.CellContent != null && _model.CellContent.IsBlock)
+                    neighbor.SetBlock();
+            }
+
+            result.CellContent = _model.CellContent;
+            result.NeedUpdate = true;
+        }
+
+        private void HandleContent(PlayerModel player, ClickResult result)
+        {
+            if (_model.CellContent is EnemyBase enemy)
+            {
+                enemy.TakeDamage(player.Damage);
+                if (enemy.Hp <= 0)
+                {
+                    foreach (var neighbor in _model.GetNeighboursList())
+                    {
+                        neighbor.SetUnblock();
+                    }
+
+                    _model.CellContent = null;
+                    _model.SetNewState(CellStates.Empty);
+                    result.NeedUpdate = true;
+                }
+
+            }
+
+            result.CellContent = _model.CellContent;
+        }
+
+
+        public void Dispose()
+        {
+            _model.OnCellStateChanged -= UpdateVisual;
+            UnityEngine.Object.Destroy(_view.gameObject);
+        }
     }
 }

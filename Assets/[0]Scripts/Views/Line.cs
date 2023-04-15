@@ -11,8 +11,6 @@ namespace ConnectionLost.Views
 
         [SerializeField] private ColorConfig colorConfig;
 
-        private CellStates _currentState = CellStates.Undefined;
-
         public void SetLine(Vector3 pos1, Vector3 pos2)
         {
             lineRenderer.positionCount = 2;
@@ -20,32 +18,31 @@ namespace ConnectionLost.Views
             lineRenderer.SetPosition(1, pos2);
         }
 
-        public void SetState(CellStates state)
+
+        public void SetOpened()
         {
-            if (state == _currentState) return;
-            _currentState = state;
-
             StopAllTweens();
-
-            switch (_currentState)
-            {
-                case CellStates.Closed:
-                    lineRenderer.material.color = colorConfig.closedColor;
-                    break;
-
-                case CellStates.Open:
-                    lineRenderer.material.DOColor(colorConfig.openColor, 0.5f);
-                    break;
-
-                case CellStates.Blocked:
-                    lineRenderer.material.DOColor(colorConfig.blockedColor, 0.8f);
-                    break;
-
-                case CellStates.Empty:
-                    lineRenderer.material.DOColor(colorConfig.emptyColor, 1.5f);
-                    break;
-            }
+            lineRenderer.material.DOColor(colorConfig.openColor, 0.5f);
         }
+
+        public void SetClosed()
+        {
+            StopAllTweens();
+            lineRenderer.material.color = colorConfig.closedColor;
+        }
+
+        public void SetBlocked()
+        {
+            StopAllTweens();
+            lineRenderer.material.DOColor(colorConfig.blockedColor, 0.8f);
+        }
+
+        public void SetEmpty()
+        {
+            StopAllTweens();
+            lineRenderer.material.DOColor(colorConfig.emptyColor, 1.5f);
+        }      
+
 
         private void StopAllTweens()
         {

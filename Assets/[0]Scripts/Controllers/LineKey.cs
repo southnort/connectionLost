@@ -1,5 +1,5 @@
 ﻿using ConnectionLost.Core;
-
+using System;
 
 namespace ConnectionLost.Controllers
 {
@@ -15,9 +15,20 @@ namespace ConnectionLost.Controllers
             _coords2 = hc2;
         }
 
-        public override string ToString()
+        public override bool Equals(object obj)
         {
-            return $"{_coords1} {_coords2}";
+            if (obj is not LineKey)
+                throw new InvalidOperationException($"Trying equals wrong type: {obj.GetType()}");
+
+            var other = (LineKey)obj;
+            return (
+              (_coords1.Equals(other._coords1) && _coords2.Equals(other._coords2)) ||
+              (_coords1.Equals(other._coords2) && _coords2.Equals(other._coords1)));
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(_coords1, _coords2);
         }
     }
 }

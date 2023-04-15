@@ -1,5 +1,4 @@
-﻿using ConnectionLost.Core;
-using DG.Tweening;
+﻿using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,38 +9,30 @@ namespace ConnectionLost.Views
     {
         [SerializeField] Image baseImage;
         [SerializeField] ColorConfig colorConfig;
-        private CellStates _currentState = CellStates.Undefined;
 
 
-        public void SetState(CellStates state)
+        public void SetOpened()
         {
-            if (state == _currentState) return;
-            _currentState = state;
-
             StopAllTweens();
+            baseImage.DOColor(colorConfig.openColor, 0.5f);
+        }
 
-            switch (_currentState)
-            {
-                case CellStates.Closed:
-                    baseImage.DOColor(colorConfig.closedColor, 0.01f);
-                    break;
+        public void SetClosed()
+        {
+            StopAllTweens();
+            baseImage.DOColor(colorConfig.closedColor, 0.01f);
+        }
 
-                case CellStates.Open:
-                    baseImage.DOColor(colorConfig.openColor, 0.5f);
-                    break;
+        public void SetBlocked()
+        {
+            StopAllTweens();
+            baseImage.DOColor(colorConfig.blockedColor, 0.8f);
+        }
 
-                case CellStates.Blocked:
-                    baseImage.DOColor(colorConfig.blockedColor, 0.8f);
-                    break;
-
-                case CellStates.Empty:
-                    baseImage.DOColor(colorConfig.emptyColor, 0.8f);
-                    break;
-
-                case CellStates.Enemy:
-                    baseImage.DOColor(colorConfig.blockedColor, 0.8f);
-                    break;
-            }
+        public void SetEmpty()
+        {
+            StopAllTweens();
+            baseImage.DOColor(colorConfig.emptyColor, 0.8f);
         }
 
         private void StopAllTweens()

@@ -297,6 +297,8 @@ GameObject:
   - component: {fileID: 1632849451}
   - component: {fileID: 1632849453}
   - component: {fileID: 1632849454}
+  - component: {fileID: 1632849455}
+  - component: {fileID: 1632849456}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -316,8 +318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7994b8d35f5d32e4d9988b4c1f012e3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellPrefab: {fileID: 6395672230271168164, guid: 1c25c1007e65dd44faaf4fa4013202b6, type: 3}
-  linePrefab: {fileID: 3441832990368726148, guid: e14a4f7c688cef346a0ecd0e63b413bf, type: 3}
+  spawner: {fileID: 1632849455}
   gridController: {fileID: 1632849453}
 --- !u!4 &1632849452
 Transform:
@@ -369,6 +370,33 @@ MonoBehaviour:
   - {fileID: 465030944877802026, guid: f9608bc5deaca004c94ead5df1224115, type: 3}
   - {fileID: 7262603292833843762, guid: 5962c6c13c3fb0649908f8d2821761f3, type: 3}
   - {fileID: 8197328343353026465, guid: 4f08acc91cf1a3e4db19e4d58ebeec71, type: 3}
+--- !u!114 &1632849455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1632849450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb60609ca63d19748b1c33498acaaad4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cellPrefab: {fileID: 6395672230271168164, guid: 1c25c1007e65dd44faaf4fa4013202b6, type: 3}
+  linePrefab: {fileID: 3441832990368726148, guid: e14a4f7c688cef346a0ecd0e63b413bf, type: 3}
+--- !u!114 &1632849456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1632849450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7eefdd8bb338bbd41b75dae990b1863b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridController: {fileID: 1632849453}
 --- !u!1 &1772755489
 GameObject:
   m_ObjectHideFlags: 0
