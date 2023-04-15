@@ -5,7 +5,6 @@ using UnityEngine;
 using ConnectionLost.Views;
 using Yrr.Core;
 
-
 namespace ConnectionLost.Controllers
 {
     internal sealed class GridBuilder : MonoBehaviour
@@ -37,7 +36,10 @@ namespace ConnectionLost.Controllers
             _linesMap = new Dictionary<LineKey, Line>();
 
             var generator = new GridGenerator();
-            var stats = new GridStats(5, 10, 50);
+            var stats = new GridStats(5, 10)
+                .SetCellCount(35)
+                .SetDifficult(GridDifficult.Tutorial);
+
             var grid = generator.GenerateRandomGrid(stats);
 
             DrawGrid(grid);
@@ -54,21 +56,13 @@ namespace ConnectionLost.Controllers
             foreach (var cell in gridModel.Cells)
             {
                 CreateLines(cell);
-            }          
+            }
         }
-      
+
         private void CreateCell(CellModel model)
         {
-            var x = model.Coordinates.X;
-            var z = model.Coordinates.Z;
-
-            Vector3 pos;
-            pos.x = (x + z % 2 * 0.5f) * (GameConfig.InnerRadius * 2f);
-            pos.y = 0f;
-            pos.z = z * (GameConfig.OuterRadius * 1.5f);
-
             var cell = Instantiate(cellPrefab, transform);
-            cell.transform.localPosition = pos;
+            cell.transform.localPosition = model.Coordinates.ToVector3();
 
             var controller = new CellController
             {
@@ -95,7 +89,7 @@ namespace ConnectionLost.Controllers
                 _linesMap.Add(key2, line);
 
                 var pos1 = _controllersMap[cell.Coordinates].View.transform.position;
-                var pos2 = _controllersMap[other.Coordinates].View.transform.position;               
+                var pos2 = _controllersMap[other.Coordinates].View.transform.position;
 
                 line.SetLine(pos1, pos2);
             }

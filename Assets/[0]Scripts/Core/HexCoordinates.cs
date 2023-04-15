@@ -44,5 +44,18 @@ namespace ConnectionLost.Core
         {
             return $"{X}\n{Z}";
         }
+
+        public Vector3 ToVector3()
+        {
+            var x = X;
+            var z = Z;
+
+            Vector3 pos;
+            pos.x = (x + z % 2 * 0.5f) * (GameConfig.InnerRadius * 2f);
+            pos.y = 0f;
+            pos.z = z * (GameConfig.OuterRadius * 1.5f);
+
+            return pos;
+        }
     }
 }

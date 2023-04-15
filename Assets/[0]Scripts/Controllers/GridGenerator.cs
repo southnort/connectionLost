@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ConnectionLost.Core;
 using ConnectionLost.Models;
+using ConnectionLost.Models.Enemy;
 using Yrr.Core;
 
 
@@ -17,6 +18,8 @@ namespace ConnectionLost.Controllers
             {
                 Cells = GenerateGridShape(plane, gridStats.CellsCount)
             };
+
+            SetEnemiesInCells(model.Cells, gridStats);
 
             return model;
         }
@@ -103,6 +106,24 @@ namespace ConnectionLost.Controllers
 
             Array.Clear(cells, 0, cells.Length);
             return result;
+        }
+
+        private static void SetEnemiesInCells(List<CellModel> cells, GridStats gridStats)
+        {
+            var coreFactory = new CoreModelFactory();
+            cells[0].CellContent = coreFactory.CreateEnemy(gridStats.Difficult);
+
+            var enemyFactory = new RandomEnemyFactory();
+            var countOfEnemies = GameConfig.EnemiesPercentByGrid * gridStats.CellsCount;
+            while (countOfEnemies > 0)
+            {
+                var cell = cells.GetRandomItem();
+                if (cell.CellContent == null)
+                {
+                    cell.CellContent = enemyFactory.CreateEnemy(gridStats.Difficult);
+                    countOfEnemies--;
+                }
+            }
         }
     }
 }

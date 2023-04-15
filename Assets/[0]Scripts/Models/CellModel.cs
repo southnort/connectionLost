@@ -16,6 +16,7 @@ namespace ConnectionLost.Models
         public HexCoordinates Coordinates { get; set; }
         public CellStates CurrentState { get; set; }
         public ICellContent CellContent { get; set; }
+        public int BlocksCount { get; set; }
 
 
 

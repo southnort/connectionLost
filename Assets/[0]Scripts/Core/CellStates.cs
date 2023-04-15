@@ -9,5 +9,6 @@ namespace ConnectionLost.Core
         Open,
         Blocked,
         Empty,
+        Enemy,
     }
 }

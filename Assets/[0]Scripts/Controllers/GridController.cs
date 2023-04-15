@@ -10,9 +10,12 @@ namespace ConnectionLost.Controllers
 {
     public sealed class GridController : MonoBehaviour
     {
+        [SerializeField] private EnemiesSpawner enemySpawner;
+
         private Dictionary<HexCoordinates, CellController> _cells;
         private Dictionary<LineKey, Line> _linesMap;
         private Camera _camera;
+        private readonly List<EnemyController> _enemies = new();
 
         private void Awake()
         {
@@ -47,7 +50,7 @@ namespace ConnectionLost.Controllers
                 UpdateLine(cell.Model, neighbour);
             }
         }
-       
+
         private void UpdateLine(CellModel cell1, CellModel cell2)
         {
             var line = _linesMap[new LineKey(cell1.Coordinates, cell2.Coordinates)];
@@ -89,18 +92,32 @@ namespace ConnectionLost.Controllers
 
         private void OpenCell(CellModel cell)
         {
-            if (cell.CellContent != null) return;
-            cell.CurrentState = CellStates.Empty;
-            UpdateCell(cell.Coordinates);
-
-            foreach (var neighbour in cell.GetNeighboursList().Where(neighbour => neighbour != null))
+            if (cell.CellContent == null)
             {
-                if (neighbour.CurrentState == CellStates.Closed)
-                {
-                    neighbour.CurrentState = CellStates.Open;
-                }
+                cell.CurrentState = CellStates.Empty;
+                UpdateCell(cell.Coordinates);
 
-                UpdateCell(neighbour.Coordinates);
+                foreach (var neighbour in cell.GetNeighboursList().Where(neighbour => neighbour != null))
+                {
+                    if (neighbour.CurrentState == CellStates.Closed)
+                    {
+                        neighbour.CurrentState = CellStates.Open;
+                    }
+
+                    UpdateCell(neighbour.Coordinates);
+                }
+            }
+
+            else
+            {
+                if (cell.CellContent is not EnemyBase) return;
+                var enemy = enemySpawner.CreateView(cell.CellContent);
+                enemy.transform.position = cell.Coordinates.ToVector3();
+                var controller = new EnemyController(enemy, cell.CellContent as EnemyBase);
+                _enemies.Add(controller);
+
+                cell.CurrentState = CellStates.Enemy;
+                UpdateCell(cell.Coordinates);
             }
         }
     }

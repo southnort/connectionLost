@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -20,7 +21,6 @@ namespace Yrr.Core
                 Object.Destroy(child.gameObject);
             }
         }
-
 
         public static Vector2 GetRandomCoordinatesAroundPoint(this Vector2 originalPoint, float radius,
                bool pointOnRadiusLine = false)
@@ -69,6 +69,51 @@ namespace Yrr.Core
         public static void Swap<T>(this IList<T> list, int indexA, int indexB)
         {
             (list[indexA], list[indexB]) = (list[indexB], list[indexA]);
+        }
+
+
+        public static string ToIntString(this float value)
+        {
+            return ((int)value).ToString();
+        }
+
+        public static string ToDotString(this float value)
+        {
+            var str = value.ToString(CultureInfo.InvariantCulture);
+            return str.Replace(",", ".");
+        }
+
+        public static string ToShortMoneyString(this float value)
+        {
+            string[] prefix = { string.Empty, "K", "M", "B" };
+            var absolute = Mathf.Abs(value);
+            int add;
+            if (absolute < 1)
+            {
+                add = (int)Mathf.Floor(Mathf.Floor(Mathf.Log10(absolute)) / 3);
+            }
+            else
+            {
+                add = (int)(Mathf.Floor(Mathf.Log10(absolute)) / 3);
+            }
+
+            var shortNumber = value / Mathf.Pow(10, add * 3);
+
+            return $"{shortNumber:0.#}{prefix[add]}";
+        }
+
+        public static string ToShortTimeString(this float timeValue)
+        {
+            var time = (int)timeValue + 1;
+
+            var seconds = time % 60f;
+            var minutes = time / 60;
+            var hours = minutes / 60;
+            minutes = minutes % 60;
+
+            if (hours > 0) return hours.ToString("00") + "h ";
+            if (minutes > 0) return minutes.ToString("00") + "m ";
+            return seconds.ToString("00") + "s";
         }
     }
 

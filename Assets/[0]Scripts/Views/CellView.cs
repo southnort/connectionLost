@@ -37,6 +37,10 @@ namespace ConnectionLost.Views
                 case CellStates.Empty:
                     baseImage.DOColor(colorConfig.emptyColor, 0.8f);
                     break;
+
+                case CellStates.Enemy:
+                    baseImage.DOColor(colorConfig.blockedColor, 0.8f);
+                    break;
             }
         }
 
