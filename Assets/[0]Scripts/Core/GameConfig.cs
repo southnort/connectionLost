@@ -12,6 +12,7 @@ namespace ConnectionLost.Core
         public const int HealerSpawnWeight = 14;
         public const int SuppressorSpawnWeight = 12;
 
+        public const int CellsCountForGridDifficult = 12;
         public const float EnemiesPercentByGrid = 0.15f;
     }
 }

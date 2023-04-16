@@ -13,17 +13,25 @@ namespace ConnectionLost.Controllers
         private Dictionary<HexCoordinates, CellController> _cells;
         private Dictionary<LineKey, LineController> _lines;
         private Dictionary<HexCoordinates, IContentController> _contents;
-        private readonly PlayerModel _player = new();
+        private PlayerController _player;
 
-        internal void Initialize(Dictionary<HexCoordinates, CellController> controllersMap, Dictionary<LineKey, LineController> linesMap)
+        
+        internal void SetCellsAndLines(Dictionary<HexCoordinates, CellController> controllersMap, Dictionary<LineKey, LineController> linesMap)
         {
             _cells = controllersMap;
             _lines = linesMap;
             _contents = new Dictionary<HexCoordinates, IContentController>();
         }
 
+        internal void SetPlayer(PlayerController player)
+        {
+            _player = player;
+        }
+
         internal void ClickOnCell(HexCoordinates coords)
         {
+            if (!_player.IsAlive) return;
+
             var result = _cells[coords].ClickOnCell(_player);
             HandleClickResult(coords, result);
         }

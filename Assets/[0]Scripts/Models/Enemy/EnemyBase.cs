@@ -8,7 +8,7 @@ namespace ConnectionLost.Models
     {
         public EnemyBase(float hp, float dmg)
         {
-            Hp = new ReactiveValue<float>() { Value = hp };
+            Hp = new ReactiveValue<float>(hp);
             Dmg = dmg;
         }
 

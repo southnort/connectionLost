@@ -8,6 +8,11 @@ namespace Yrr.Core
         private T _currentValue;
         public event Action<T> OnChange;
 
+        public ReactiveValue(T startValue)
+        {
+            _currentValue = startValue;
+        }
+
         public T Value
         {
             get => _currentValue;

@@ -9,43 +9,16 @@ namespace ConnectionLost.Controllers
     internal sealed class GridBuilder : MonoBehaviour
     {
         [SerializeField] private GridElementsSpawner spawner;
-        [SerializeField] private GridController gridController;
 
         private Dictionary<HexCoordinates, CellController> _controllersMap;
         private Dictionary<LineKey, LineController> _linesMap;
-
-        private void Awake()
-        {
-            TestDraw();
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                TestDraw();
-            }
-        }
-
-        private void TestDraw()
+      
+        public void BuildGrid(GridModel gridModel, GridController controller)
         {
             transform.ClearChildren();
             _controllersMap = new Dictionary<HexCoordinates, CellController>();
             _linesMap = new Dictionary<LineKey, LineController>();
 
-            var generator = new GridGenerator();
-            var stats = new GridStats(5, 10)
-                .SetCellCount(35)
-                .SetDifficult(GridDifficult.Tutorial);
-
-            var grid = generator.GenerateRandomGrid(stats);
-
-            DrawGrid(grid);
-            gridController.Initialize(_controllersMap, _linesMap);
-        }
-
-        public void DrawGrid(GridModel gridModel)
-        {
             foreach (var cell in gridModel.Cells)
             {
                 CreateCell(cell);
@@ -55,7 +28,11 @@ namespace ConnectionLost.Controllers
             {
                 CreateLines(cell);
             }
+
+            controller.SetCellsAndLines(_controllersMap, _linesMap);
         }
+
+
 
         private void CreateCell(CellModel model)
         {

@@ -52,7 +52,7 @@ namespace ConnectionLost.Controllers
             }
         }
 
-        public ClickResult ClickOnCell(PlayerModel player)
+        public ClickResult ClickOnCell(PlayerController player)
         {
             var result = new ClickResult();
 
@@ -88,11 +88,12 @@ namespace ConnectionLost.Controllers
             result.NeedUpdate = true;
         }
 
-        private void HandleContent(PlayerModel player, ClickResult result)
+        private void HandleContent(PlayerController player, ClickResult result)
         {
             if (_model.CellContent is EnemyBase enemy)
             {
-                enemy.TakeDamage(player.Damage.Value);
+                player.AttackEnemy(enemy);
+
                 if (enemy.Hp.Value <= 0)
                 {
                     foreach (var neighbor in _model.GetNeighboursList())

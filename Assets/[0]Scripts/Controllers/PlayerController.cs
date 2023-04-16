@@ -1,34 +1,53 @@
 ﻿using ConnectionLost.Models;
 using ConnectionLost.Views;
 using System;
+using Yrr.Core;
 
 namespace ConnectionLost.Controllers
 {
-    internal sealed class PlayerController:IDisposable
+    internal sealed class PlayerController : IDisposable
     {
         private readonly PlayerModel _model;
-        private readonly PlayerStateView _playerStateView;
+        private PlayerStateView _playerStateView;
 
+        public bool IsAlive => _model.Hp.Value > 0;
 
+        public PlayerController(PlayerModel model, PlayerStateView playerStateView)
+        {
+            _playerStateView = playerStateView;
+            _model = model;
 
-
+            _model.Hp.OnChange += OnHpChanged;
+            _model.Damage.OnChange += OnDmgChanged;
+        }
 
         private void OnHpChanged(float hp)
         {
-
+            if (_playerStateView)
+                _playerStateView.UpdateHp(hp.ToIntString());
         }
 
-        private void OnDmgChanged(float dmg) 
+        private void OnDmgChanged(float dmg)
         {
-        
+            if (_playerStateView)
+                _playerStateView.UpdateDmg(dmg.ToIntString());
+        }
+
+        public void AttackEnemy(EnemyBase enemy)
+        {
+            enemy.TakeDamage(_model.Damage.Value);
+
+            if (enemy.Hp.Value > 0)
+            {
+                _model.Hp.Value -= enemy.Dmg;
+            }
         }
 
 
         public void Dispose()
         {
-            UnityEngine.Object.Destroy(_playerStateView.gameObject);
             _model.Hp.OnChange -= OnHpChanged;
-            _model.Damage.OnChange-= OnDmgChanged;
+            _model.Damage.OnChange -= OnDmgChanged;
         }
     }
 }

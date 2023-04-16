@@ -1,6 +1,6 @@
-﻿
+﻿using ConnectionLost.Core;
 
-namespace ConnectionLost.Core
+namespace ConnectionLost.Models
 {
     public sealed class GridStats
     {
