@@ -19,6 +19,9 @@ namespace ConnectionLost.Controllers
 
             _model.Hp.OnChange += OnHpChanged;
             _model.Damage.OnChange += OnDmgChanged;
+
+            OnHpChanged(_model.Hp.Value);
+            OnDmgChanged(_model.Damage.Value);
         }
 
         private void OnHpChanged(float hp)
