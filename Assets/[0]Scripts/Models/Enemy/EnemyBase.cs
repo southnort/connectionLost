@@ -1,23 +1,25 @@
 using ConnectionLost.Core;
-using System;
+using Yrr.Core;
 
 
 namespace ConnectionLost.Models
 {
     public abstract class EnemyBase : ICellContent
     {
-        public event Action<float> OnHealthChanged;
+        public EnemyBase(float hp, float dmg)
+        {
+            Hp = new ReactiveValue<float>() { Value = hp };
+            Dmg = dmg;
+        }
 
         public virtual bool IsBlock => true;
         public virtual bool IsCanBlocked => false;
-
-        public float Hp { get; internal set; }
-        public float Dmg { get; internal set; }
+        public ReactiveValue<float> Hp { get; private set; }
+        public float Dmg { get; private set; }
 
         public void TakeDamage(float damage)
         {
-            Hp -= damage;
-            OnHealthChanged?.Invoke(Hp);
+            Hp.Value -= damage;
         }
     }
 }

@@ -7,12 +7,7 @@ namespace ConnectionLost.Models.Enemy
     {
         public override EnemyBase CreateEnemy(GridDifficult difficult)
         {
-            var enemy = new HealerModel
-            {
-                Hp = 80,
-                Dmg = 10
-            };
-
+            var enemy = new HealerModel(80, 10);
             return enemy;
         }
     }

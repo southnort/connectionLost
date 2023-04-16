@@ -92,8 +92,8 @@ namespace ConnectionLost.Controllers
         {
             if (_model.CellContent is EnemyBase enemy)
             {
-                enemy.TakeDamage(player.Damage);
-                if (enemy.Hp <= 0)
+                enemy.TakeDamage(player.Damage.Value);
+                if (enemy.Hp.Value <= 0)
                 {
                     foreach (var neighbor in _model.GetNeighboursList())
                     {

@@ -2,6 +2,7 @@
 using ConnectionLost.Views;
 using Yrr.Core;
 
+
 namespace ConnectionLost.Controllers
 {
     public sealed class EnemyController : IContentController
@@ -15,8 +16,8 @@ namespace ConnectionLost.Controllers
             _view = view;
             _model = model;
 
-            _view.SetInitialData(_model.Hp.ToIntString(), _model.Dmg.ToIntString());
-            _model.OnHealthChanged += OnHpChanged;
+            _view.SetInitialData(_model.Hp.Value.ToIntString(), _model.Dmg.ToIntString());
+            _model.Hp.OnChange += OnHpChanged;
         }
 
         private void OnHpChanged(float hp)
@@ -28,7 +29,7 @@ namespace ConnectionLost.Controllers
         public void Dispose()
         {
             UnityEngine.Object.Destroy(_view.gameObject);
-            _model.OnHealthChanged -= OnHpChanged;
+            _model.Hp.OnChange -= OnHpChanged;
         }
     }
 }

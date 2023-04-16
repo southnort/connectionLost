@@ -6,27 +6,29 @@ namespace ConnectionLost.Models.Enemy
     {
         public override EnemyBase CreateEnemy(GridDifficult difficult)
         {
-            var enemy = new AntivirusModel();
+            float hp = 0;
+            float dmg = 0;
 
             switch (difficult)
             {
                 case GridDifficult.Tutorial:
-                    enemy.Dmg = 30;
-                    enemy.Hp = 30; break;
+                    dmg = 30;
+                    hp = 30; break;
 
                 case GridDifficult.Easy:
-                    enemy.Dmg = 40;
-                    enemy.Hp = 30; break;
+                    dmg = 40;
+                    hp = 30; break;
 
                 case GridDifficult.Medium:
-                    enemy.Dmg = 40;
-                    enemy.Hp = 50; break;
+                    dmg = 40;
+                    hp = 50; break;
 
                 case GridDifficult.Hard:
-                    enemy.Dmg = 40;
-                    enemy.Hp = 60; break;
+                    dmg = 40;
+                    hp = 60; break;
             }
 
+            var enemy = new AntivirusModel(hp, dmg);
             return enemy;
         }
 

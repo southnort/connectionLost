@@ -7,11 +7,7 @@ namespace ConnectionLost.Models.Enemy
     {
         public override EnemyBase CreateEnemy(GridDifficult difficult)
         {
-            var enemy = new SuppressorModel
-            {
-                Dmg = 15,
-                Hp = 60
-            };
+            var enemy = new SuppressorModel(60, 15);
 
             return enemy;
         }

@@ -6,21 +6,16 @@ namespace ConnectionLost.Models.Enemy
     {
         public override EnemyBase CreateEnemy(GridDifficult difficult)
         {
-            var core = new CoreModel
-            {
-                CoreDifficult = difficult,
-                Dmg = 10
-            };
-
-            core.Hp = difficult switch
+            float hp = difficult switch
             {
                 GridDifficult.Tutorial => 50,
                 GridDifficult.Easy => 70,
                 GridDifficult.Medium => 70,
                 GridDifficult.Hard => 90,
-                _ => core.Hp
+                _ => 0,
             };
 
+            var core = new CoreModel(hp, 10, difficult);
             return core;
         }
     }
