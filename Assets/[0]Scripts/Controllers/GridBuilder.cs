@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using ConnectionLost.Core;
+﻿using ConnectionLost.Core;
 using ConnectionLost.Models;
+using System.Collections.Generic;
 using UnityEngine;
-using ConnectionLost.Views;
 using Yrr.Core;
 
 namespace ConnectionLost.Controllers
@@ -80,7 +79,7 @@ namespace ConnectionLost.Controllers
                 var line = spawner.CreateLine();
                 line.transform.SetParent(transform, false);
 
-                var controller = new LineController(cell,other, line);
+                var controller = new LineController(cell, other, line);
                 _linesMap.Add(key, controller);
             }
         }

@@ -1,8 +1,6 @@
 using ConnectionLost.Core;
 using ConnectionLost.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 
@@ -15,13 +13,13 @@ namespace ConnectionLost.Controllers
         private Dictionary<HexCoordinates, CellController> _cells;
         private Dictionary<LineKey, LineController> _lines;
         private Dictionary<HexCoordinates, IContentController> _contents;
-        private PlayerModel _player = new PlayerModel();
+        private readonly PlayerModel _player = new();
 
         internal void Initialize(Dictionary<HexCoordinates, CellController> controllersMap, Dictionary<LineKey, LineController> linesMap)
         {
             _cells = controllersMap;
             _lines = linesMap;
-            _contents = new();
+            _contents = new Dictionary<HexCoordinates, IContentController>();
         }
 
         internal void ClickOnCell(HexCoordinates coords)
@@ -48,14 +46,12 @@ namespace ConnectionLost.Controllers
 
         private void ShowContent(HexCoordinates coords, ICellContent content)
         {
-            if (content is EnemyBase)
-            {
-                var view = enemySpawner.CreateView(content);
-                view.transform.position = coords.ToVector3();
+            if (content is not EnemyBase enemy) return;
+            var view = enemySpawner.CreateView(content);
+            view.transform.position = coords.ToVector3();
 
-                var controller = new EnemyController(view, content as EnemyBase);
-                _contents.Add(coords, controller);
-            }
+            var controller = new EnemyController(view, enemy);
+            _contents.Add(coords, controller);
         }
 
         private void OnDestroy()

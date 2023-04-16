@@ -83,7 +83,7 @@ namespace ConnectionLost.Models
 
         public bool IsBlocked()
         {
-            if(CurrentState == CellStates.Empty) return false;
+            if (CurrentState == CellStates.Empty) return false;
             if (CurrentState == CellStates.HaveContent && !CellContent.IsCanBlocked)
                 return false;
 

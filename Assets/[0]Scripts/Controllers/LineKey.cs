@@ -17,13 +17,15 @@ namespace ConnectionLost.Controllers
 
         public override bool Equals(object obj)
         {
-            if (obj is not LineKey)
-                throw new InvalidOperationException($"Trying equals wrong type: {obj.GetType()}");
+            return obj switch
+            {
+                null => throw new NullReferenceException("Trying equals null"),
 
-            var other = (LineKey)obj;
-            return (
-              (_coords1.Equals(other._coords1) && _coords2.Equals(other._coords2)) ||
-              (_coords1.Equals(other._coords2) && _coords2.Equals(other._coords1)));
+                LineKey other => (_coords1.Equals(other._coords1) && _coords2.Equals(other._coords2)) ||
+                                 (_coords1.Equals(other._coords2) && _coords2.Equals(other._coords1)),
+
+                _ => throw new InvalidOperationException($"Trying equals wrong type: {obj.GetType()}")
+            };
         }
 
         public override int GetHashCode()

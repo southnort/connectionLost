@@ -9,9 +9,9 @@ namespace ConnectionLost.Controllers
 {
     internal sealed class LineController : IDisposable
     {
-        private CellModel _cell1;
-        private CellModel _cell2;
-        private Line _view;
+        private readonly CellModel _cell1;
+        private readonly CellModel _cell2;
+        private readonly Line _view;
 
         public LineController(CellModel cell1, CellModel cell2, Line view)
         {

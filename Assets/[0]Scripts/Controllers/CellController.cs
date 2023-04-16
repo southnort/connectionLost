@@ -9,8 +9,8 @@ namespace ConnectionLost.Controllers
 {
     internal sealed class CellController : IDisposable
     {
-        private CellModel _model;
-        private CellView _view;
+        private readonly CellModel _model;
+        private readonly CellView _view;
 
         public CellController(CellModel model, CellView view)
         {
@@ -74,15 +74,13 @@ namespace ConnectionLost.Controllers
 
         private void OpenCell(ClickResult result)
         {
-            if (_model.CellContent != null)
-                _model.SetNewState(CellStates.HaveContent);
-            else
-                _model.SetNewState(CellStates.Empty);
+            _model.SetNewState(_model.CellContent != null ? CellStates.HaveContent : CellStates.Empty);
+
 
             foreach (var neighbor in _model.GetNeighboursList())
             {
                 neighbor.SetNewState(CellStates.Opened);
-                if (_model.CellContent != null && _model.CellContent.IsBlock)
+                if (_model.CellContent is { IsBlock: true })
                     neighbor.SetBlock();
             }
 

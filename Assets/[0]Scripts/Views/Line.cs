@@ -1,6 +1,5 @@
-﻿using ConnectionLost.Core;
+﻿using DG.Tweening;
 using UnityEngine;
-using DG.Tweening;
 
 
 namespace ConnectionLost.Views
@@ -41,7 +40,7 @@ namespace ConnectionLost.Views
         {
             StopAllTweens();
             lineRenderer.material.DOColor(colorConfig.emptyColor, 1.5f);
-        }      
+        }
 
 
         private void StopAllTweens()

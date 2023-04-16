@@ -1,6 +1,5 @@
 ﻿using ConnectionLost.Models;
 using ConnectionLost.Views;
-using System;
 using Yrr.Core;
 
 namespace ConnectionLost.Controllers
