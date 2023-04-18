@@ -1,5 +1,5 @@
 ﻿using ConnectionLost.Core;
-using Yrr.Core;
+using Yrr.Utils;
 
 namespace ConnectionLost.Models.Enemy
 {

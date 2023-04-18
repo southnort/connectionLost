@@ -9,6 +9,6 @@ namespace ConnectionLost.Models.Enemy
 
         public override bool IsBlock => false;
         public override bool IsCanBlocked => true;
-        public GridDifficult CoreDifficult { get; private set; }
+        public GridDifficult CoreDifficult { get; }
     }
 }

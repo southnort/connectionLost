@@ -1,14 +1,14 @@
 ﻿using ConnectionLost.Models;
 using ConnectionLost.Views;
 using System;
-using Yrr.Core;
+using Yrr.Utils;
 
 namespace ConnectionLost.Controllers
 {
     internal sealed class PlayerController : IDisposable
     {
         private readonly PlayerModel _model;
-        private PlayerStateView _playerStateView;
+        private readonly PlayerStateView _playerStateView;
 
         public bool IsAlive => _model.Hp.Value > 0;
 

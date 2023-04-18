@@ -6,7 +6,7 @@ using UnityEditor;
 #endif
 
 
-namespace Yrr.Core
+namespace Yrr.Utils
 {
     public static class Extensions
     {

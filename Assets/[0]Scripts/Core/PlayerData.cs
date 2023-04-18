@@ -6,54 +6,56 @@ namespace ConnectionLost.Core
 {
     public sealed class PlayerData
     {
-        private static PlayerData _currData;
-        private const string _key = "playerdata";
+        private static PlayerData _currentData;
+        private const string Key = "playerdata";
 
-        public float BaseHp => 90f;
-        public float BaseDmg => 25f;
-        public GridDifficult CurrentDifficult => GridDifficult.Easy;
 
         public static PlayerData CurrentData
         {
             get
             {
-                if (_currData == null)
+                if (_currentData == null)
                 {
                     LoadData();
                 }
-                return _currData;
+                return _currentData;
             }
         }
 
+        public float BaseHp => 90f;
+        public float BaseDmg => 25f;
+        public GridDifficult CurrentDifficult => GridDifficult.Easy;
+
+
         private static void LoadData()
         {
-            var str = PlayerPrefs.GetString(_key);
+            var str = PlayerPrefs.GetString(Key);
 
-            if (str != null && str.Length > 0)
+            if (str is { Length: > 0 })
             {
                 var json = JsonConvert.DeserializeObject<PlayerData>(str);
 
                 if (json == null)
                 {
-                    _currData = new PlayerData();
-                    _currData.SaveData();
+                    _currentData = new PlayerData();
+                    _currentData.SaveData();
                 }
                 else
                 {
-                    _currData = (json);
+                    _currentData = (json);
                 }
             }
             else
             {
-                _currData = new PlayerData();
-                _currData.SaveData();
+                _currentData = new PlayerData();
+                _currentData.SaveData();
             }
         }
 
         public void SaveData()
         {
             string json = JsonConvert.SerializeObject(this);
-            PlayerPrefs.SetString(_key, json);
+            PlayerPrefs.SetString(Key, json);
             PlayerPrefs.Save();
         }
     }

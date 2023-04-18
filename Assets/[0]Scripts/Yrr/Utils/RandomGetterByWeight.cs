@@ -2,13 +2,13 @@
 using System.Linq;
 using UnityEngine;
 
-namespace Yrr.Core
+namespace Yrr.Utils
 {
     public sealed class RandomizerByWeight<T>
     {
         private readonly List<ItemWithWeight<T>> _items = new();
 
-        public int Count=>  _items.Count;
+        public int Count => _items.Count;
 
         public T GetRandom()
         {

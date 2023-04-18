@@ -1,12 +1,12 @@
 using ConnectionLost.Core;
-using Yrr.Core;
+using Yrr.Utils;
 
 
 namespace ConnectionLost.Models
 {
     public abstract class EnemyBase : ICellContent
     {
-        public EnemyBase(float hp, float dmg)
+        protected EnemyBase(float hp, float dmg)
         {
             Hp = new ReactiveValue<float>(hp);
             Dmg = dmg;
@@ -14,8 +14,8 @@ namespace ConnectionLost.Models
 
         public virtual bool IsBlock => true;
         public virtual bool IsCanBlocked => false;
-        public ReactiveValue<float> Hp { get; private set; }
-        public float Dmg { get; private set; }
+        public ReactiveValue<float> Hp { get; }
+        public float Dmg { get; }
 
         public void TakeDamage(float damage)
         {

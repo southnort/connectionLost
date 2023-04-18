@@ -1,6 +1,6 @@
 ﻿using ConnectionLost.Models;
 using ConnectionLost.Views;
-using Yrr.Core;
+using Yrr.Utils;
 
 
 namespace ConnectionLost.Controllers

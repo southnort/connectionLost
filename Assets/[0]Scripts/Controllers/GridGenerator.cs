@@ -4,7 +4,7 @@ using System.Linq;
 using ConnectionLost.Core;
 using ConnectionLost.Models;
 using ConnectionLost.Models.Enemy;
-using Yrr.Core;
+using Yrr.Utils;
 
 
 namespace ConnectionLost.Controllers

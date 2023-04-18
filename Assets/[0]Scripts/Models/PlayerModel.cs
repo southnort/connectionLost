@@ -1,13 +1,13 @@
 ﻿using ConnectionLost.Core;
-using Yrr.Core;
+using Yrr.Utils;
 
 
 namespace ConnectionLost.Models
 {
     public sealed class PlayerModel
     {
-        public ReactiveValue<float> Hp { get; private set; }
-        public ReactiveValue<float> Damage { get; private set; }
+        public ReactiveValue<float> Hp { get; }
+        public ReactiveValue<float> Damage { get; }
 
         public PlayerModel(PlayerData playerData)
         {

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Yrr.Core;
+using Yrr.Utils;
 
 
 namespace ConnectionLost.Models

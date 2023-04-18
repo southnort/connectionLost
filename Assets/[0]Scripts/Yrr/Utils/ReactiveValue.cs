@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace Yrr.Core
+namespace Yrr.Utils
 {
     public sealed class ReactiveValue<T>
     {

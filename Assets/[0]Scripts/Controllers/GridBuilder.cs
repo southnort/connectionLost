@@ -2,7 +2,7 @@
 using ConnectionLost.Models;
 using System.Collections.Generic;
 using UnityEngine;
-using Yrr.Core;
+using Yrr.Utils;
 
 namespace ConnectionLost.Controllers
 {
