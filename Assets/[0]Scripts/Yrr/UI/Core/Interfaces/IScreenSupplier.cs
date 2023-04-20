@@ -1,9 +1,7 @@
 namespace Yrr.UI.Core
 {
-    public interface IScreenSupplier<in TKey, TValue> where TValue : IScreen
+    public interface IScreenSupplier<in TKey, out TValue> where TValue : IScreen
     {
-        TValue LoadScreen(TKey key);
-
-        void UnloadScreen(TValue frame);
+        TValue LoadScreen(TKey key);       
     }
 }

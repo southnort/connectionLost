@@ -77,7 +77,6 @@ namespace Yrr.UI.Core
             popup.Hide();
 
             _activePopups.Remove(name);
-            _supplier.UnloadScreen(popup);
             OnPopupHidden?.Invoke(name);
         }
 

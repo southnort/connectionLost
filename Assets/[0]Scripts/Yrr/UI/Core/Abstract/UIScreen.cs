@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.Events;
+using Yrr.UI.Core;
 
 
-namespace Yrr.UI.Core
+namespace Yrr.UI
 {
     public abstract class UIScreen : MonoBehaviour, IScreen
     {
@@ -14,15 +15,27 @@ namespace Yrr.UI.Core
 
         public void Show(object args, IScreen.ICallback callback)
         {
+            ShowProcedure();
             _callback = callback;
             OnShow(args);
             onShow?.Invoke(args);
+        }
+
+        protected virtual void ShowProcedure()
+        {
+            gameObject.SetActive(true);
         }
 
         public void Hide()
         {
             OnHide();
             onHide?.Invoke();
+            HidingProcedure();
+        }
+
+        protected virtual void HidingProcedure()
+        {
+            gameObject.SetActive(false);
         }
 
         public void Close()

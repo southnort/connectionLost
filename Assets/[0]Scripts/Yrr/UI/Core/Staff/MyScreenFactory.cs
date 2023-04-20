@@ -20,7 +20,5 @@ namespace Yrr.UI.Core
 
             throw new Exception($"Frame {key} is not found!");
         }
-
-
     }
 }

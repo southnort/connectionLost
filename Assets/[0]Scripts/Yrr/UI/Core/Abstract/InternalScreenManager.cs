@@ -47,7 +47,6 @@ namespace Yrr.UI.Core
         private void HideScreenInternal(TKey key, TValue screen)
         {
             screen.Hide();
-            _supplier.UnloadScreen(screen);
             OnScreenHidden?.Invoke(key);
         }
     }
