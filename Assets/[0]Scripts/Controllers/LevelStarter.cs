@@ -11,11 +11,7 @@ namespace ConnectionLost.Controllers
         [SerializeField] private GridController gridController;
         [SerializeField] private PlayerStateView playerStateView;
         private PlayerController _playerController;
-
-        private void Start()
-        {
-            StartLevel();
-        }
+        
 
         private void Update()
         {

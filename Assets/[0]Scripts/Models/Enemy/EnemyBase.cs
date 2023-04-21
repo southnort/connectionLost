@@ -8,18 +8,18 @@ namespace ConnectionLost.Models
     {
         protected EnemyBase(float hp, float dmg)
         {
-            Hp = new ReactiveValue<float>(hp);
+            Hp = new ReactiveFloat(hp);
             Dmg = dmg;
         }
 
         public virtual bool IsBlock => true;
         public virtual bool IsCanBlocked => false;
-        public ReactiveValue<float> Hp { get; }
+        public ReactiveFloat Hp { get; private set; }
         public float Dmg { get; }
 
         public void TakeDamage(float damage)
         {
-            Hp.Value -= damage;
+            Hp -= damage;
         }
     }
 }

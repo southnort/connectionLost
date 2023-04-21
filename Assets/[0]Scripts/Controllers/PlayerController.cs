@@ -10,7 +10,7 @@ namespace ConnectionLost.Controllers
         private readonly PlayerModel _model;
         private readonly PlayerStateView _playerStateView;
 
-        public bool IsAlive => _model.Hp.Value > 0;
+        public bool IsAlive => _model.Hp > 0;
 
         public PlayerController(PlayerModel model, PlayerStateView playerStateView)
         {
@@ -42,7 +42,7 @@ namespace ConnectionLost.Controllers
 
             if (enemy.Hp.Value > 0)
             {
-                _model.Hp.Value -= enemy.Dmg;
+                _model.Hp -= enemy.Dmg;
             }
         }
 

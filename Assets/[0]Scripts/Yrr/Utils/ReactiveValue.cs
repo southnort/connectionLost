@@ -3,7 +3,7 @@
 
 namespace Yrr.Utils
 {
-    public sealed class ReactiveValue<T>
+    public abstract class ReactiveValue<T>
     {
         private T _currentValue;
         public event Action<T> OnChange;
@@ -23,6 +23,16 @@ namespace Yrr.Utils
                 _currentValue = value;
                 OnChange?.Invoke(_currentValue);
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Value.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(base.GetHashCode(), Value);
         }
     }
 }

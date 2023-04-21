@@ -6,13 +6,13 @@ namespace ConnectionLost.Models
 {
     public sealed class PlayerModel
     {
-        public ReactiveValue<float> Hp { get; }
-        public ReactiveValue<float> Damage { get; }
+        public ReactiveFloat Hp { get; set; }
+        public ReactiveFloat Damage { get; }
 
         public PlayerModel(PlayerData playerData)
         {
-            Hp = new ReactiveValue<float>(playerData.BaseHp);
-            Damage = new ReactiveValue<float>(playerData.BaseDmg);
+            Hp = new ReactiveFloat(playerData.BaseHp);
+            Damage = new ReactiveFloat(playerData.BaseDmg);
         }
     }
 }
