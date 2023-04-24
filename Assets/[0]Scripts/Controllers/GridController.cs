@@ -1,7 +1,12 @@
 using ConnectionLost.Core;
 using ConnectionLost.Models;
+using ConnectionLost.Models.Enemy;
+using ConnectionLost.UI;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Yrr.Utils;
+using Yrr.UI;
 
 
 namespace ConnectionLost.Controllers
@@ -14,6 +19,9 @@ namespace ConnectionLost.Controllers
         private Dictionary<LineKey, LineController> _lines;
         private Dictionary<HexCoordinates, IContentController> _contents;
         private PlayerController _player;
+        private List<EnemyBase> _activeEnemies;
+        private List<HealerModel> _activeHealers;
+        private UIManager _uiManager;
 
 
         internal void SetCellsAndLines(Dictionary<HexCoordinates, CellController> controllersMap, Dictionary<LineKey, LineController> linesMap)
@@ -21,6 +29,8 @@ namespace ConnectionLost.Controllers
             _cells = controllersMap;
             _lines = linesMap;
             _contents = new Dictionary<HexCoordinates, IContentController>();
+            _activeEnemies = new List<EnemyBase>();
+            _activeHealers = new List<HealerModel>();
         }
 
         internal void SetPlayer(PlayerController player)
@@ -28,12 +38,24 @@ namespace ConnectionLost.Controllers
             _player = player;
         }
 
+        internal void SetUiManager(UIManager uiManager)
+        {
+            _uiManager = uiManager;
+        }
+
         internal void ClickOnCell(HexCoordinates coords)
         {
-            if (!_player.IsAlive) return;
+            if (!_player.IsAlive)
+            {
+                OnPlayerDeath();
+            }
+            else
+            {
 
-            var result = _cells[coords].ClickOnCell(_player);
-            HandleClickResult(coords, result);
+                var result = _cells[coords].ClickOnCell(_player);
+                HandleClickResult(coords, result);
+                HandleGameTick();
+            }
         }
 
         private void HandleClickResult(HexCoordinates clickedCellCoords, ClickResult result)
@@ -42,6 +64,7 @@ namespace ConnectionLost.Controllers
 
             if (_contents.ContainsKey(clickedCellCoords) && result.CellContent == null)
             {
+                HandleContentRemove(_cells[clickedCellCoords].GetContent());
                 _contents[clickedCellCoords].Dispose();
                 _contents.Remove(clickedCellCoords);
             }
@@ -49,14 +72,62 @@ namespace ConnectionLost.Controllers
             if (result.CellContent != null && !_contents.ContainsKey(clickedCellCoords))
             {
                 ShowContent(clickedCellCoords, result.CellContent);
+                HandleContentSpawn(result.CellContent);
             }
 
-            if (!_player.IsAlive)
-            {
-                OnPlayerDeath();
-            }
 
         }
+
+        private void HandleContentSpawn(ICellContent cellContent)
+        {
+            if (cellContent is SuppressorModel suppressor)
+            {
+                for (int i = 0; i < suppressor.DebuffStrenght; i++)
+                {
+                    _player.AddAttackDebuff();
+                }
+            }
+
+
+        }
+
+        private void HandleContentRemove(ICellContent cellContent)
+        {
+            if (cellContent is CoreModel)
+            {
+                OnCoreDeath();
+            }
+
+            if (cellContent is SuppressorModel suppressor)
+            {
+                for (int i = 0; i < suppressor.DebuffStrenght; i++)
+                {
+                    _player.RemoveAttackDebuff();
+                }
+            }
+
+            if (cellContent is HealerModel healer)
+            {
+                _activeHealers.Remove(healer);
+            }
+            else if (cellContent is EnemyBase enemy)
+            {
+                _activeEnemies.Remove(enemy);
+            }
+        }
+
+        private void HandleGameTick()
+        {
+            foreach (var heal in _activeHealers)
+            {
+                if (_activeEnemies.Any())
+                    _activeEnemies.GetRandomItem().Hp.Value += heal.HealValue;
+                else
+                    _activeHealers.GetRandomItem().Hp.Value += heal.HealValue;
+            }
+        }
+
+
 
         private void ShowContent(HexCoordinates coords, ICellContent content)
         {
@@ -65,6 +136,14 @@ namespace ConnectionLost.Controllers
             view.transform.position = coords.ToVector3();
 
             var controller = new EnemyController(view, enemy);
+            if (enemy is HealerModel healer)
+            {
+                _activeHealers.Add(healer);
+            }
+            else
+            {
+                _activeEnemies.Add(enemy);
+            }
             _contents.Add(coords, controller);
         }
 
@@ -89,16 +168,14 @@ namespace ConnectionLost.Controllers
         }
 
 
-
-
         private void OnPlayerDeath()
         {
-            Debug.LogError("Player dead");
-
+            _uiManager.GoToWindow<GameOverCanvas>();
         }
 
-
-      
-
+        private void OnCoreDeath()
+        {
+            Debug.LogError("Core dead");
+        }
     }
 }

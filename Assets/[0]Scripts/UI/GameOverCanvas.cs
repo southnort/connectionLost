@@ -4,8 +4,8 @@ using Yrr.UI;
 
 namespace ConnectionLost.UI
 {
-    internal sealed class GameOverCanvas : UIScreen
+    public sealed class GameOverCanvas : UIScreen
     {
-       
+
     }
 }

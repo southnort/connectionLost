@@ -1,4 +1,5 @@
-﻿using ConnectionLost.Models;
+﻿using ConnectionLost.Core;
+using ConnectionLost.Models;
 using ConnectionLost.Views;
 using System;
 using Yrr.Utils;
@@ -9,8 +10,13 @@ namespace ConnectionLost.Controllers
     {
         private readonly PlayerModel _model;
         private readonly PlayerStateView _playerStateView;
+        private int _attackDebuff;
+
 
         public bool IsAlive => _model.Hp > 0;
+
+
+
 
         public PlayerController(PlayerModel model, PlayerStateView playerStateView)
         {
@@ -47,10 +53,41 @@ namespace ConnectionLost.Controllers
         }
 
 
+        public void AddAttackDebuff()
+        {
+            _attackDebuff++;
+            UpdateAttack();
+        }
+
+        public void RemoveAttackDebuff()
+        {
+            _attackDebuff--;
+            if (_attackDebuff < 0)
+                _attackDebuff = 0;
+            UpdateAttack();
+        }
+
+        private void UpdateAttack()
+        {
+            var attackModification = _attackDebuff * GameConfig.SuppressorDebuffValuePerLevel;
+
+            _model.Damage -= attackModification;
+
+            if (_model.Damage < GameConfig.PlayerMinStrenght)
+            {
+                _model.Damage.Value = GameConfig.PlayerMinStrenght;
+            }
+        }
+
+
+
+
         public void Dispose()
         {
             _model.Hp.OnChange -= OnHpChanged;
             _model.Damage.OnChange -= OnDmgChanged;
         }
+
+
     }
 }

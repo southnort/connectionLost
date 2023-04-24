@@ -1923,6 +1923,7 @@ MonoBehaviour:
   gridBuilder: {fileID: 1632849451}
   gridController: {fileID: 1632849453}
   playerStateView: {fileID: 1044130943}
+  uiManager: {fileID: 1805719623}
 --- !u!4 &2112028000
 Transform:
   m_ObjectHideFlags: 0

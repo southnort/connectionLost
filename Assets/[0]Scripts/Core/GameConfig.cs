@@ -14,5 +14,8 @@ namespace ConnectionLost.Core
 
         public const int CellsCountForGridDifficult = 12;
         public const float EnemiesPercentByGrid = 0.15f;
+
+        public const float SuppressorDebuffValuePerLevel = 15f;
+        public const float PlayerMinStrenght = 10f;
     }
 }

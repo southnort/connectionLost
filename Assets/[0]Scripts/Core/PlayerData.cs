@@ -24,7 +24,7 @@ namespace ConnectionLost.Core
 
         public float BaseHp => 90f;
         public float BaseDmg => 25f;
-        public GridDifficult CurrentDifficult => GridDifficult.Easy;
+        public GridDifficult CurrentDifficult => GridDifficult.Hard;
 
 
         private static void LoadData()

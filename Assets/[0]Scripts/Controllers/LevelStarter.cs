@@ -2,6 +2,7 @@
 using UnityEngine;
 using ConnectionLost.Core;
 using ConnectionLost.Views;
+using Yrr.UI;
 
 namespace ConnectionLost.Controllers
 {
@@ -10,6 +11,7 @@ namespace ConnectionLost.Controllers
         [SerializeField] private GridBuilder gridBuilder;
         [SerializeField] private GridController gridController;
         [SerializeField] private PlayerStateView playerStateView;
+        [SerializeField] private UIManager uiManager;
         private PlayerController _playerController;
 
 
@@ -33,6 +35,7 @@ namespace ConnectionLost.Controllers
 
             gridBuilder.BuildGrid(grid, gridController);
             gridController.SetPlayer(_playerController);
+            gridController.SetUiManager(uiManager);
         }
 
         private void OnDestroy()

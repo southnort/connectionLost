@@ -4,7 +4,7 @@ using System;
 
 namespace Yrr.UI
 {
-    internal sealed class UIManager : MonoBehaviour
+    public sealed class UIManager : MonoBehaviour
     {
         [SerializeField] private ScreenManager screenManager;
         [SerializeField] private PopupManager popupManager;
@@ -31,6 +31,11 @@ namespace Yrr.UI
         public void GoToWindow(Type key, object args = null)
         {
             screenManager.ChangeScreen(key, args);
+        }
+
+        public void GoToWindow<T>(object args = null) where T : UIScreen
+        {
+            GoToWindow(typeof(T), args);
         }
 
         public void ShowPopup(Type key, object args = null)

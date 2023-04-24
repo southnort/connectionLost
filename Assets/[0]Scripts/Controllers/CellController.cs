@@ -111,6 +111,11 @@ namespace ConnectionLost.Controllers
             result.CellContent = _model.CellContent;
         }
 
+        public ICellContent GetContent()
+        {
+            return _model.CellContent;
+        }
+
 
         public void Dispose()
         {
