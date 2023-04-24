@@ -11,7 +11,7 @@ namespace ConnectionLost.Controllers
         [SerializeField] private GridController gridController;
         [SerializeField] private PlayerStateView playerStateView;
         private PlayerController _playerController;
-        
+
 
         private void Update()
         {
@@ -37,6 +37,7 @@ namespace ConnectionLost.Controllers
 
         private void OnDestroy()
         {
+            if (_playerController == null) return;
             _playerController.Dispose();
         }
     }

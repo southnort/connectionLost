@@ -15,7 +15,7 @@ namespace ConnectionLost.Controllers
         private Dictionary<HexCoordinates, IContentController> _contents;
         private PlayerController _player;
 
-        
+
         internal void SetCellsAndLines(Dictionary<HexCoordinates, CellController> controllersMap, Dictionary<LineKey, LineController> linesMap)
         {
             _cells = controllersMap;
@@ -50,6 +50,12 @@ namespace ConnectionLost.Controllers
             {
                 ShowContent(clickedCellCoords, result.CellContent);
             }
+
+            if (!_player.IsAlive)
+            {
+                OnPlayerDeath();
+            }
+
         }
 
         private void ShowContent(HexCoordinates coords, ICellContent content)
@@ -64,6 +70,8 @@ namespace ConnectionLost.Controllers
 
         private void OnDestroy()
         {
+            if (_cells == null) return;
+
             foreach (var cell in _cells.Values)
             {
                 cell.Dispose();
@@ -79,5 +87,18 @@ namespace ConnectionLost.Controllers
                 content.Dispose();
             }
         }
+
+
+
+
+        private void OnPlayerDeath()
+        {
+            Debug.LogError("Player dead");
+
+        }
+
+
+      
+
     }
 }

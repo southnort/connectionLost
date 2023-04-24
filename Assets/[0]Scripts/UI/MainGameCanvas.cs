@@ -5,7 +5,7 @@ using DG.Tweening;
 
 namespace ConnectionLost.UI
 {
-    public class MainGameCanvas : UIScreen
+    internal sealed class MainGameCanvas : UIScreen
     {
         [SerializeField] private CanvasGroup canvasGroup;
 
