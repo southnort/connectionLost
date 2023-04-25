@@ -7,6 +7,7 @@ using System.Linq;
 using UnityEngine;
 using Yrr.Utils;
 using Yrr.UI;
+using static Codice.CM.WorkspaceServer.WorkspaceTreeDataStore;
 
 
 namespace ConnectionLost.Controllers
@@ -14,6 +15,7 @@ namespace ConnectionLost.Controllers
     public sealed class GridController : MonoBehaviour
     {
         [SerializeField] private EnemiesSpawner enemySpawner;
+        [SerializeField] private BonusesSpawner bonusesSpawner;
 
         private Dictionary<HexCoordinates, CellController> _cells;
         private Dictionary<LineKey, LineController> _lines;
@@ -51,7 +53,6 @@ namespace ConnectionLost.Controllers
             }
             else
             {
-
                 var result = _cells[coords].ClickOnCell(_player);
                 HandleClickResult(coords, result);
                 HandleGameTick();
@@ -131,8 +132,20 @@ namespace ConnectionLost.Controllers
 
         private void ShowContent(HexCoordinates coords, ICellContent content)
         {
-            if (content is not EnemyBase enemy) return;
-            var view = enemySpawner.CreateView(content);
+            if (content is EnemyBase enemy)
+            {
+                SpawnEnemy(coords, enemy);
+            }
+
+            else if (content is BonusBase bonus)
+            {
+                SpawnBonus(coords, bonus);
+            }
+        }
+
+        private void SpawnEnemy(HexCoordinates coords, EnemyBase enemy)
+        {
+            var view = enemySpawner.CreateView(enemy);
             view.transform.position = coords.ToVector3();
 
             var controller = new EnemyController(view, enemy);
@@ -146,6 +159,16 @@ namespace ConnectionLost.Controllers
             }
             _contents.Add(coords, controller);
         }
+
+        private void SpawnBonus(HexCoordinates coords, BonusBase bonus)
+        {
+            var view = bonusesSpawner.CreateView(bonus);
+            view.transform.position = coords.ToVector3();
+
+            var controller = new BonusController(view, bonus);
+            _contents.Add(coords, controller);
+        }
+
 
         private void OnDestroy()
         {

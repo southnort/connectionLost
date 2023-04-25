@@ -52,6 +52,21 @@ namespace ConnectionLost.Controllers
             }
         }
 
+        public bool TryTakeBonus(BonusBase bonus)
+        {
+            for (int i = 0; i < _model.TakedBonuses.Length; i++)
+            {
+                if (_model.TakedBonuses[i] == null)
+                {
+                    _model.TakedBonuses[i] = bonus;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
 
         public void AddAttackDebuff()
         {

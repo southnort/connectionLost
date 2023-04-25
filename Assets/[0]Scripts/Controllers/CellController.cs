@@ -3,7 +3,7 @@ using ConnectionLost.Models;
 using ConnectionLost.Views;
 using System;
 using UnityEngine;
-
+using UnityEngine.UIElements;
 
 namespace ConnectionLost.Controllers
 {
@@ -105,7 +105,16 @@ namespace ConnectionLost.Controllers
                     _model.SetNewState(CellStates.Empty);
                     result.NeedUpdate = true;
                 }
+            }
 
+            else if(_model.CellContent is BonusBase bonus) 
+            {
+                if (player.TryTakeBonus(bonus))
+                {
+                    _model.CellContent = null;
+                    _model.SetNewState(CellStates.Empty);
+                    result.NeedUpdate = true;
+                }                    
             }
 
             result.CellContent = _model.CellContent;

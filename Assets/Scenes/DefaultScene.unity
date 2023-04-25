@@ -1375,6 +1375,7 @@ GameObject:
   - component: {fileID: 1632849454}
   - component: {fileID: 1632849455}
   - component: {fileID: 1632849456}
+  - component: {fileID: 1632849457}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -1423,6 +1424,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemySpawner: {fileID: 1632849454}
+  bonusesSpawner: {fileID: 1632849457}
 --- !u!114 &1632849454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1472,6 +1474,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridController: {fileID: 1632849453}
+--- !u!114 &1632849457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1632849450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cebc3fff5d0f414b9ebeb871d6a8391, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bonusesPrefabs:
+  - {fileID: 4339993800630159122, guid: dcc3505a17c903d41a5b88179aa8bc4b, type: 3}
+  - {fileID: 2367004239566677380, guid: 8c84c9ea77bcf5c43ac6f2172fe5d9ad, type: 3}
+  - {fileID: 5744208974532640396, guid: 24105999c00bc8a459c4d68e67063461, type: 3}
+  - {fileID: 8115312757823897444, guid: e91de85b98534d04abfc0b3a0c0ce2a7, type: 3}
 --- !u!1 &1688205384
 GameObject:
   m_ObjectHideFlags: 0

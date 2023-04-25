@@ -26,7 +26,5 @@ namespace ConnectionLost.UI
             seq.Append(DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, .7f, .5f));
             seq.Append(DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, 1f, .3f));
         }
-
-
     }
 }

@@ -20,6 +20,7 @@ namespace ConnectionLost.Controllers
             };
 
             SetEnemiesInCells(model.Cells, gridStats);
+            SetBonusesInCells(model.Cells, gridStats);
 
             return model;
         }
@@ -122,6 +123,21 @@ namespace ConnectionLost.Controllers
                 {
                     cell.CellContent = enemyFactory.CreateEnemy(gridStats.Difficult);
                     countOfEnemies--;
+                }
+            }
+        }
+
+        private static void SetBonusesInCells(List<CellModel> cells, GridStats gridStats)
+        {
+            var bonusFactory = new RandomBonusFactory();
+            var countOfBonus = GameConfig.BonusesPercentByGrid * gridStats.CellsCount;
+            while (countOfBonus > 0)
+            {
+                var cell = cells.GetRandomItem();
+                if (cell.CellContent == null && cell.CurrentState != CellStates.Opened)
+                {
+                    cell.CellContent = bonusFactory.CreateBonus(gridStats.Difficult);
+                    countOfBonus--;
                 }
             }
         }
