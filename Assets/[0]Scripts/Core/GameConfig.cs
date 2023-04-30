@@ -12,10 +12,15 @@ namespace ConnectionLost.Core
         public const int HealerSpawnWeight = 14;
         public const int SuppressorSpawnWeight = 12;
 
-        public const int RepairBonusSpawnWeight = 6;
-        public const int HalfHpBonusSpawnWeight = 6;
-        public const int ShieldBonusSpawnWeight = 3;
-        public const int HawkeyeBonusSpawnWeight = 3;
+        //public const int RepairBonusSpawnWeight = 6;
+        //public const int HalfHpBonusSpawnWeight = 6;
+        //public const int ShieldBonusSpawnWeight = 3;
+        //public const int HawkeyeBonusSpawnWeight = 3;
+
+        public const int RepairBonusSpawnWeight = 0;
+        public const int HalfHpBonusSpawnWeight = 0;
+        public const int ShieldBonusSpawnWeight = 0;
+        public const int HawkeyeBonusSpawnWeight = 6;
 
         public const int CellsCountForGridDifficult = 12;
         public const float EnemiesPercentByGrid = 0.15f;

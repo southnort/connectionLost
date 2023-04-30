@@ -4,6 +4,7 @@ using ConnectionLost.Core;
 using ConnectionLost.Views;
 using Yrr.UI;
 
+
 namespace ConnectionLost.Controllers
 {
     internal sealed class LevelStarter : MonoBehaviour
@@ -11,6 +12,7 @@ namespace ConnectionLost.Controllers
         [SerializeField] private GridBuilder gridBuilder;
         [SerializeField] private GridController gridController;
         [SerializeField] private PlayerStateView playerStateView;
+        [SerializeField] private PlayerTakedBonusesView playerTakedBonusesView;
         [SerializeField] private UIManager uiManager;
         private PlayerController _playerController;
 
@@ -27,7 +29,7 @@ namespace ConnectionLost.Controllers
         {
             var playerData = PlayerData.CurrentData;
             var player = new PlayerModel(playerData);
-            _playerController = new PlayerController(player, playerStateView);
+            _playerController = new PlayerController(player, playerStateView, playerTakedBonusesView);
             var generator = new GridGenerator();
             var gridFactory = new GridStatsFactory();
             var stats = gridFactory.BuildGridStats(playerData.CurrentDifficult);

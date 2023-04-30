@@ -19,7 +19,7 @@ namespace ConnectionLost.Models
 
         private void InitializeRandomizer(GridDifficult difficult)
         {
-            _randomizer.AddVariant(() => new RepairBonus(), GameConfig.RepairBonusSpawnWeight);
+            _randomizer.AddVariant(() => new RepairBonus(10, 25), GameConfig.RepairBonusSpawnWeight);
             _randomizer.AddVariant(() => new HalfHpBonus(), GameConfig.HalfHpBonusSpawnWeight);
 
             if ((int)difficult > 1)

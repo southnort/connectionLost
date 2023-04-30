@@ -7,7 +7,6 @@ using System.Linq;
 using UnityEngine;
 using Yrr.Utils;
 using Yrr.UI;
-using static Codice.CM.WorkspaceServer.WorkspaceTreeDataStore;
 
 
 namespace ConnectionLost.Controllers
@@ -15,7 +14,7 @@ namespace ConnectionLost.Controllers
     public sealed class GridController : MonoBehaviour
     {
         [SerializeField] private EnemiesSpawner enemySpawner;
-        [SerializeField] private BonusesSpawner bonusesSpawner;
+        [SerializeField] private BonusViewsBuilder bonusBuilder;
 
         private Dictionary<HexCoordinates, CellController> _cells;
         private Dictionary<LineKey, LineController> _lines;
@@ -24,7 +23,6 @@ namespace ConnectionLost.Controllers
         private List<EnemyBase> _activeEnemies;
         private List<HealerModel> _activeHealers;
         private UIManager _uiManager;
-
 
         internal void SetCellsAndLines(Dictionary<HexCoordinates, CellController> controllersMap, Dictionary<LineKey, LineController> linesMap)
         {
@@ -38,6 +36,7 @@ namespace ConnectionLost.Controllers
         internal void SetPlayer(PlayerController player)
         {
             _player = player;
+            _player.SetBonusBuilder(bonusBuilder);
         }
 
         internal void SetUiManager(UIManager uiManager)
@@ -126,7 +125,30 @@ namespace ConnectionLost.Controllers
                 else
                     _activeHealers.GetRandomItem().Hp.Value += heal.HealValue;
             }
+
+            for (int i = 0; i < _player.Model.TakedBonuses.Length; i++)
+            {
+                var heal = _player.Model.TakedBonuses[i];
+                if (heal != null && heal is RepairBonus repair && heal.IsActive)
+                {
+                    repair.CountOfUses--;
+                    _player.Model.Hp += Mathf.Round(Random.Range(repair.MinHealValue, repair.MaxHealValue));
+
+                    if (repair.CountOfUses <= 0)
+                    {
+                        _player.RemoveBonus(i);
+                    }
+                }
+            }
         }
+
+
+        public void ClickOnActivateBonus(int bonusIndex)
+        {
+            _player.ActivateBonus(bonusIndex);
+        }
+
+
 
 
 
@@ -162,7 +184,8 @@ namespace ConnectionLost.Controllers
 
         private void SpawnBonus(HexCoordinates coords, BonusBase bonus)
         {
-            var view = bonusesSpawner.CreateView(bonus);
+            var view = bonusBuilder.CreateView(bonus);
+            view.transform.SetParent(transform);
             view.transform.position = coords.ToVector3();
 
             var controller = new BonusController(view, bonus);

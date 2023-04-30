@@ -1,4 +1,5 @@
 ﻿using ConnectionLost.Core;
+using Yrr.Utils;
 
 namespace ConnectionLost.Models
 {
@@ -7,5 +8,9 @@ namespace ConnectionLost.Models
         public bool IsBlock => false;
 
         public bool IsCanBlocked => true;
+
+        public ReactiveInt CountOfUses = new ReactiveInt(1);
+
+        public bool IsActive { get; set; }
     }
 }
