@@ -8,7 +8,7 @@ namespace Yrr.Utils
         private T _currentValue;
         public event Action<T> OnChange;
 
-        public ReactiveValue(T startValue)
+        protected ReactiveValue(T startValue)
         {
             _currentValue = startValue;
         }
@@ -32,7 +32,7 @@ namespace Yrr.Utils
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), Value);
+            return HashCode.Combine(Value);
         }
     }
 }

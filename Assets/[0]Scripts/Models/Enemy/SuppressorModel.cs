@@ -6,6 +6,6 @@ namespace ConnectionLost.Models
     {
         public SuppressorModel(float hp, float dmg) : base(hp, dmg) { }
 
-        public int DebuffStrenght => 1;
+        public int DeBuffPower => 1;
     }
 }

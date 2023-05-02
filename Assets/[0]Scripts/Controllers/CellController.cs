@@ -92,7 +92,7 @@ namespace ConnectionLost.Controllers
         {
             if (_model.CellContent is EnemyBase enemy)
             {
-                player.AttackEnemy(enemy);
+                player.AttackEnemy(enemy, _model.Coordinates);
 
                 if (enemy.Hp.Value <= 0)
                 {
@@ -107,14 +107,21 @@ namespace ConnectionLost.Controllers
                 }
             }
 
-            else if(_model.CellContent is BonusBase bonus) 
+            else if (_model.CellContent is BonusBase bonus)
             {
                 if (player.TryTakeBonus(bonus))
                 {
                     _model.CellContent = null;
                     _model.SetNewState(CellStates.Empty);
                     result.NeedUpdate = true;
-                }                    
+                }
+            }
+
+            else if (_model.CellContent is WhiteNode whiteNode)
+            {
+                result.ForceUpdate = true;
+                _model.CellContent = whiteNode.WhiteNodeContent;
+                OpenCell(result);
             }
 
             result.CellContent = _model.CellContent;

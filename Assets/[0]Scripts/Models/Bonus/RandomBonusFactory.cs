@@ -6,7 +6,7 @@ namespace ConnectionLost.Models
     public sealed class RandomBonusFactory
     {
         private delegate BonusBase CreateBonusDelegate();
-        private readonly RandomizerByWeight<CreateBonusDelegate> _randomizer = new RandomizerByWeight<CreateBonusDelegate>();
+        private readonly RandomizerByWeight<CreateBonusDelegate> _randomizer = new();
 
 
         public BonusBase CreateBonus(GridDifficult difficult)
@@ -22,11 +22,9 @@ namespace ConnectionLost.Models
             _randomizer.AddVariant(() => new RepairBonus(10, 25), GameConfig.RepairBonusSpawnWeight);
             _randomizer.AddVariant(() => new HalfHpBonus(), GameConfig.HalfHpBonusSpawnWeight);
 
-            if ((int)difficult > 1)
-            {
-                _randomizer.AddVariant(() => new ShieldBonus(), GameConfig.ShieldBonusSpawnWeight);
-                _randomizer.AddVariant(() => new HawkeyeBonus(), GameConfig.HawkeyeBonusSpawnWeight);
-            }
+            if ((int)difficult <= 1) return;
+            _randomizer.AddVariant(() => new ShieldBonus(), GameConfig.ShieldBonusSpawnWeight);
+            _randomizer.AddVariant(() => new HawkEyeBonus(), GameConfig.HawkEyeBonusSpawnWeight);
         }
     }
 }

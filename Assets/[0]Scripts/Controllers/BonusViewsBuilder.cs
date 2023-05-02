@@ -28,29 +28,15 @@ namespace ConnectionLost.Controllers
             if (bonus == null)
                 return null;
 
-            Sprite sprite;
-            if (bonus is RepairBonus)
+            var sprite = bonus switch
             {
-                sprite = bonusViewSprites[0];
-            }
-            else if (bonus is HalfHpBonus)
-            {
-                sprite = bonusViewSprites[1];
-            }
-            else if (bonus is ShieldBonus)
-            {
-                sprite = bonusViewSprites[2];
-            }
-            else if (bonus is HawkeyeBonus)
-            {
-                sprite = bonusViewSprites[3];
-            }
-
-
-            else
-            {
-                throw new InvalidOperationException($"Cant handle type {bonus.GetType()}");
-            }
+                RepairBonus => bonusViewSprites[0],
+                HalfHpBonus => bonusViewSprites[1],
+                ShieldBonus => bonusViewSprites[2],
+                HawkEyeBonus => bonusViewSprites[3],
+                WhiteNode =>bonusViewSprites[4],
+                _ => throw new InvalidOperationException($"Cant handle type {bonus.GetType()}")
+            };
 
             return sprite;
         }

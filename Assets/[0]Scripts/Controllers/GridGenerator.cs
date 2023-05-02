@@ -21,6 +21,7 @@ namespace ConnectionLost.Controllers
 
             SetEnemiesInCells(model.Cells, gridStats);
             SetBonusesInCells(model.Cells, gridStats);
+            SetWhiteNodes(model.Cells, gridStats);
 
             return model;
         }
@@ -138,6 +139,32 @@ namespace ConnectionLost.Controllers
                 {
                     cell.CellContent = bonusFactory.CreateBonus(gridStats.Difficult);
                     countOfBonus--;
+                }
+            }
+        }
+
+        private static void SetWhiteNodes(List<CellModel> cells, GridStats gridStats)
+        {
+            var nodesCount = (int)gridStats.Difficult;
+            while (nodesCount > 0)
+            {
+                var cell = cells.GetRandomItem();
+                if (cell.CellContent == null && cell.CurrentState != CellStates.Opened)
+                {
+                    WhiteNode whiteNode;
+                    if (UnityEngine.Random.Range(0f, 1f) < 0.5f)
+                    {
+                        var bonusFactory = new RandomBonusFactory();
+                        whiteNode = new WhiteNode(bonusFactory.CreateBonus(gridStats.Difficult));
+                    }
+                    else
+                    {
+                        var enemyFactory = new RandomEnemyFactory();
+                        whiteNode = new WhiteNode(enemyFactory.CreateEnemy(gridStats.Difficult));
+                    }
+
+                    cell.CellContent = whiteNode;
+                    nodesCount--;
                 }
             }
         }

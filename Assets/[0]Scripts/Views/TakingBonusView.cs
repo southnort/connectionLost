@@ -5,7 +5,7 @@ using TMPro;
 
 namespace ConnectionLost.Views
 {
-    internal sealed class TakedBonusView : MonoBehaviour
+    internal sealed class TakingBonusView : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI useCountTmp;
         [SerializeField] private Image bonusIcon;
@@ -16,14 +16,7 @@ namespace ConnectionLost.Views
         {
             bonusIcon.gameObject.SetActive(true);
             bonusIcon.sprite = bonusSprite;
-            if (countOfUse > 1)
-            {
-                useCountTmp.text = countOfUse.ToString();
-            }
-            else
-            {
-                useCountTmp.text = "";
-            }
+            useCountTmp.text = countOfUse > 1 ? countOfUse.ToString() : "";
 
             activateButton.interactable = true;
         }

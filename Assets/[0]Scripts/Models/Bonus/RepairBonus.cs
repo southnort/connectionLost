@@ -1,5 +1,6 @@
 ﻿using Yrr.Utils;
 
+
 namespace ConnectionLost.Models
 {
     public sealed class RepairBonus : BonusBase
@@ -12,7 +13,7 @@ namespace ConnectionLost.Models
             MaxHealValue = maxHealValue;
         }
 
-        public float MinHealValue { get; private set; }
-        public float MaxHealValue { get; private set; }
+        public float MinHealValue { get; }
+        public float MaxHealValue { get; }
     }
 }

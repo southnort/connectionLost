@@ -1,12 +1,11 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 namespace ConnectionLost.Views
 {
-    public sealed class PlayerTakedBonusesView : MonoBehaviour
+    public sealed class PlayerTakingBonusesView : MonoBehaviour
     {
-        [SerializeField] private TakedBonusView[] bonusViews;
+        [SerializeField] private TakingBonusView[] bonusViews;
 
 
         public void SetInitialized(int index, Sprite bonusIcon, int count)

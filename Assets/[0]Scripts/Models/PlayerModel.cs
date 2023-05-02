@@ -9,7 +9,7 @@ namespace ConnectionLost.Models
         public ReactiveFloat Hp { get; set; }
         public ReactiveFloat Damage { get; set; }
 
-        public BonusBase[] TakedBonuses { get; } = new BonusBase[3];
+        public BonusBase[] TakingBonuses { get; } = new BonusBase[3];
 
         public PlayerModel(PlayerData playerData)
         {

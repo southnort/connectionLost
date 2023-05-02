@@ -9,8 +9,10 @@ namespace ConnectionLost.Models
 
         public bool IsCanBlocked => true;
 
-        public ReactiveInt CountOfUses = new ReactiveInt(1);
+        public ReactiveInt CountOfUses = new(1);
 
         public bool IsActive { get; set; }
+
+        public int IndexInPlayerBonuses { get; set; }
     }
 }

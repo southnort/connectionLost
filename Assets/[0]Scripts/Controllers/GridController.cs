@@ -22,6 +22,7 @@ namespace ConnectionLost.Controllers
         private PlayerController _player;
         private List<EnemyBase> _activeEnemies;
         private List<HealerModel> _activeHealers;
+        private Dictionary<HawkEyeBonus, EnemyBase> _activeHawkEyes;
         private UIManager _uiManager;
 
         internal void SetCellsAndLines(Dictionary<HexCoordinates, CellController> controllersMap, Dictionary<LineKey, LineController> linesMap)
@@ -31,12 +32,14 @@ namespace ConnectionLost.Controllers
             _contents = new Dictionary<HexCoordinates, IContentController>();
             _activeEnemies = new List<EnemyBase>();
             _activeHealers = new List<HealerModel>();
+            _activeHawkEyes = new Dictionary<HawkEyeBonus, EnemyBase>();
         }
 
         internal void SetPlayer(PlayerController player)
         {
             _player = player;
             _player.SetBonusBuilder(bonusBuilder);
+            _player.SetGridController(this);
         }
 
         internal void SetUiManager(UIManager uiManager)
@@ -62,6 +65,18 @@ namespace ConnectionLost.Controllers
         {
             if (!result.NeedUpdate) return;
 
+            if (result.ForceUpdate)
+            {
+                HandleContentRemove(_cells[clickedCellCoords].GetContent());
+                _contents[clickedCellCoords].Dispose();
+                _contents.Remove(clickedCellCoords);
+
+                ShowContent(clickedCellCoords, result.CellContent);
+                HandleContentSpawn(result.CellContent);
+
+                return;
+            }
+
             if (_contents.ContainsKey(clickedCellCoords) && result.CellContent == null)
             {
                 HandleContentRemove(_cells[clickedCellCoords].GetContent());
@@ -74,17 +89,15 @@ namespace ConnectionLost.Controllers
                 ShowContent(clickedCellCoords, result.CellContent);
                 HandleContentSpawn(result.CellContent);
             }
-
-
         }
 
         private void HandleContentSpawn(ICellContent cellContent)
         {
             if (cellContent is SuppressorModel suppressor)
             {
-                for (int i = 0; i < suppressor.DebuffStrenght; i++)
+                for (int i = 0; i < suppressor.DeBuffPower; i++)
                 {
-                    _player.AddAttackDebuff();
+                    _player.AddAttackDeBuff();
                 }
             }
 
@@ -100,19 +113,20 @@ namespace ConnectionLost.Controllers
 
             if (cellContent is SuppressorModel suppressor)
             {
-                for (int i = 0; i < suppressor.DebuffStrenght; i++)
+                for (int i = 0; i < suppressor.DeBuffPower; i++)
                 {
-                    _player.RemoveAttackDebuff();
+                    _player.RemoveAttackDeBuff();
                 }
             }
 
-            if (cellContent is HealerModel healer)
+            switch (cellContent)
             {
-                _activeHealers.Remove(healer);
-            }
-            else if (cellContent is EnemyBase enemy)
-            {
-                _activeEnemies.Remove(enemy);
+                case HealerModel healer:
+                    _activeHealers.Remove(healer);
+                    break;
+                case EnemyBase enemy:
+                    _activeEnemies.Remove(enemy);
+                    break;
             }
         }
 
@@ -126,17 +140,42 @@ namespace ConnectionLost.Controllers
                     _activeHealers.GetRandomItem().Hp.Value += heal.HealValue;
             }
 
-            for (int i = 0; i < _player.Model.TakedBonuses.Length; i++)
+            for (var i = 0; i < _player.Model.TakingBonuses.Length; i++)
             {
-                var heal = _player.Model.TakedBonuses[i];
-                if (heal != null && heal is RepairBonus repair && heal.IsActive)
-                {
-                    repair.CountOfUses--;
-                    _player.Model.Hp += Mathf.Round(Random.Range(repair.MinHealValue, repair.MaxHealValue));
+                var heal = _player.Model.TakingBonuses[i];
+                if (heal is not RepairBonus repair || !heal.IsActive) continue;
+                repair.CountOfUses--;
+                _player.Model.Hp += Mathf.Round(Random.Range(repair.MinHealValue, repair.MaxHealValue));
 
-                    if (repair.CountOfUses <= 0)
+                if (repair.CountOfUses <= 0)
+                {
+                    _player.RemoveBonus(i);
+                }
+            }
+
+            var keys = _activeHawkEyes.Keys.ToList();
+            foreach (var key in keys)
+            {
+                if (_activeHawkEyes[key] == null || _activeHawkEyes[key].Hp <= 0)
+                {
+                    _player.RemoveBonus(key.IndexInPlayerBonuses);
+                    _activeHawkEyes.Remove(key);
+                }
+
+                else
+                {
+                    _activeHawkEyes[key].TakeDamage(key.DamagePerTick);
+                    if (_activeHawkEyes[key].Hp <= 0)
                     {
-                        _player.RemoveBonus(i);
+                        _contents[key.AttackedEnemyCoordinates].Dispose();
+                        _contents.Remove(key.AttackedEnemyCoordinates);
+                        _cells[key.AttackedEnemyCoordinates].ClickOnCell(_player);
+                    }
+                    key.CountOfUses--;
+                    if (key.CountOfUses <= 0)
+                    {
+                        _player.RemoveBonus(key.IndexInPlayerBonuses);
+                        _activeHawkEyes.Remove(key);
                     }
                 }
             }
@@ -154,14 +193,17 @@ namespace ConnectionLost.Controllers
 
         private void ShowContent(HexCoordinates coords, ICellContent content)
         {
-            if (content is EnemyBase enemy)
+            switch (content)
             {
-                SpawnEnemy(coords, enemy);
-            }
-
-            else if (content is BonusBase bonus)
-            {
-                SpawnBonus(coords, bonus);
+                case EnemyBase enemy:
+                    SpawnEnemy(coords, enemy);
+                    break;
+                case BonusBase bonus:
+                    SpawnBonus(coords, bonus);
+                    break;
+                case WhiteNode node:
+                    SpawnWhiteNode(coords, node);
+                    break;
             }
         }
 
@@ -188,8 +230,23 @@ namespace ConnectionLost.Controllers
             view.transform.SetParent(transform);
             view.transform.position = coords.ToVector3();
 
-            var controller = new BonusController(view, bonus);
+            var controller = new BonusController(view);
             _contents.Add(coords, controller);
+        }
+
+        private void SpawnWhiteNode(HexCoordinates coords, WhiteNode whiteNode)
+        {
+            var view = bonusBuilder.CreateView(whiteNode);
+            view.transform.SetParent(transform);
+            view.transform.position = coords.ToVector3();
+
+            var controller = new BonusController(view);
+            _contents.Add(coords, controller);
+        }
+
+        public void ActivateHawkEye(HawkEyeBonus hawkEye, EnemyBase enemy)
+        {
+            _activeHawkEyes.Add(hawkEye, enemy);
         }
 
 
@@ -219,7 +276,7 @@ namespace ConnectionLost.Controllers
             _uiManager.GoToWindow<GameOverCanvas>();
         }
 
-        private void OnCoreDeath()
+        private static void OnCoreDeath()
         {
             Debug.LogError("Core dead");
         }

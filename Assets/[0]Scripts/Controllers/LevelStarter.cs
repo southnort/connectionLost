@@ -1,7 +1,7 @@
-﻿using ConnectionLost.Models;
-using UnityEngine;
-using ConnectionLost.Core;
+﻿using ConnectionLost.Core;
+using ConnectionLost.Models;
 using ConnectionLost.Views;
+using UnityEngine;
 using Yrr.UI;
 
 
@@ -12,7 +12,7 @@ namespace ConnectionLost.Controllers
         [SerializeField] private GridBuilder gridBuilder;
         [SerializeField] private GridController gridController;
         [SerializeField] private PlayerStateView playerStateView;
-        [SerializeField] private PlayerTakedBonusesView playerTakedBonusesView;
+        [SerializeField] private PlayerTakingBonusesView playerTakingBonusesView;
         [SerializeField] private UIManager uiManager;
         private PlayerController _playerController;
 
@@ -29,7 +29,7 @@ namespace ConnectionLost.Controllers
         {
             var playerData = PlayerData.CurrentData;
             var player = new PlayerModel(playerData);
-            _playerController = new PlayerController(player, playerStateView, playerTakedBonusesView);
+            _playerController = new PlayerController(player, playerStateView, playerTakingBonusesView);
             var generator = new GridGenerator();
             var gridFactory = new GridStatsFactory();
             var stats = gridFactory.BuildGridStats(playerData.CurrentDifficult);
