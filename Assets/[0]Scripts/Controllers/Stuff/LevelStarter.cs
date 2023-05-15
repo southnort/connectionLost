@@ -13,7 +13,6 @@ namespace ConnectionLost.Controllers
         [SerializeField] private GridController gridController;
         [SerializeField] private PlayerStateView playerStateView;
         [SerializeField] private PlayerTakingBonusesView playerTakingBonusesView;
-        [SerializeField] private UIManager uiManager;
         private PlayerController _playerController;
 
 
@@ -37,7 +36,6 @@ namespace ConnectionLost.Controllers
 
             gridBuilder.BuildGrid(grid, gridController);
             gridController.SetPlayer(_playerController);
-            gridController.SetUiManager(uiManager);
         }
 
         private void OnDestroy()

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
+using System.Linq;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -48,6 +49,11 @@ namespace Yrr.Utils
         public static T GetRandomItem<T>(this T[] list)
         {
             return list.Length < 1 ? default : list[Random.Range(0, list.Length)];
+        }
+
+        public static T GetRandomItem<T>(this IEnumerable<T> list)
+        {
+            return list.Count() < 1 ? default : list.ElementAt(Random.Range(0, list.Count()));
         }
 
         public static T GetLast<T>(this List<T> list)

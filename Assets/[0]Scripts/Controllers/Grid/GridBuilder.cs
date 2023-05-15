@@ -29,7 +29,7 @@ namespace ConnectionLost.Controllers
                 CreateLines(cell);
             }
 
-            controller.SetCellsAndLines(_controllersMap, _linesMap);
+            controller.SetCells(_controllersMap);
         }
 
 

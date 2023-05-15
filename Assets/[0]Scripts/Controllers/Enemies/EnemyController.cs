@@ -1,14 +1,18 @@
 ﻿using ConnectionLost.Models;
 using ConnectionLost.Views;
+using System;
 using Yrr.Utils;
 
 
 namespace ConnectionLost.Controllers
 {
-    public sealed class EnemyController : IContentController
+    internal class EnemyController : IContentController
     {
         private readonly EnemyView _view;
         private readonly EnemyBase _model;
+
+        protected GridController GridController;
+        protected event Action OnDeath;
 
 
         public EnemyController(EnemyView view, EnemyBase model)
@@ -24,12 +28,25 @@ namespace ConnectionLost.Controllers
         {
             var str = hp.ToIntString();
             _view.UpdateHp(str);
+
+            if (hp <= 0)
+                OnDeath?.Invoke();
         }
 
         public void Dispose()
         {
             UnityEngine.Object.Destroy(_view.gameObject);
             _model.Hp.OnChange -= OnHpChanged;
+        }
+
+        public void Heal(float healValue)
+        {
+            _model.Heal(healValue);
+        }
+
+        internal virtual void SetGridController(GridController gridController)
+        {
+            GridController = gridController;
         }
     }
 }

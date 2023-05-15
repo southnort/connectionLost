@@ -21,5 +21,10 @@ namespace ConnectionLost.Models
         {
             Hp -= damage;
         }
+
+        public void Heal(float heal)
+        {
+            Hp += heal;
+        }
     }
 }

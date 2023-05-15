@@ -38,8 +38,6 @@ namespace ConnectionLost.Controllers
 
 
             gridController.ClickOnCell(coords);
-
-            
         }
     }
 }

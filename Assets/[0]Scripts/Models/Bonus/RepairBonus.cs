@@ -1,4 +1,5 @@
-﻿using Yrr.Utils;
+﻿using UnityEngine;
+using Yrr.Utils;
 
 
 namespace ConnectionLost.Models
@@ -9,11 +10,18 @@ namespace ConnectionLost.Models
         {
             CountOfUses = new ReactiveInt(3);
 
-            MinHealValue = minHealValue;
-            MaxHealValue = maxHealValue;
+            _minHealValue = minHealValue;
+            _maxHealValue = maxHealValue;
         }
 
-        public float MinHealValue { get; }
-        public float MaxHealValue { get; }
+        private float _minHealValue;
+        private float _maxHealValue;
+
+
+        public void RepairPlayer(PlayerModel player)
+        {
+            CountOfUses--;
+            player.Hp+= Mathf.Round(Random.Range(_minHealValue, _maxHealValue));
+        }
     }
 }

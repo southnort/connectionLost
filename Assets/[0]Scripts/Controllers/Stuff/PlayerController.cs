@@ -3,6 +3,7 @@ using ConnectionLost.Models;
 using ConnectionLost.Views;
 using System;
 using UnityEngine;
+using UnityEngine.XR;
 using Yrr.Utils;
 
 
@@ -11,7 +12,7 @@ namespace ConnectionLost.Controllers
     internal sealed class PlayerController : IDisposable
     {
         private BonusViewsBuilder _bonusViewsBuilder;
-        internal PlayerModel Model { get; }
+        private PlayerModel _model { get; }
         private readonly PlayerStateView _playerStateView;
         private readonly PlayerTakingBonusesView _playerTakeBonusesView;
         private int _attackDeBuff;
@@ -19,18 +20,18 @@ namespace ConnectionLost.Controllers
 
 
 
-        public bool IsAlive => Model.Hp > 0;
+        public bool IsAlive => _model.Hp > 0;
 
 
         public PlayerController(PlayerModel model, PlayerStateView playerStateView, PlayerTakingBonusesView playerTakeBonusesView)
         {
             _playerStateView = playerStateView;
-            Model = model;
+            _model = model;
             _playerTakeBonusesView = playerTakeBonusesView;
 
-            for (var i = 0; i < Model.TakingBonuses.Length; i++)
+            for (var i = 0; i < _model.TakingBonuses.Length; i++)
             {
-                if (Model.TakingBonuses[i] == null)
+                if (_model.TakingBonuses[i] == null)
                 {
                     _playerTakeBonusesView.ClearBonus(i);
                 }
@@ -39,16 +40,16 @@ namespace ConnectionLost.Controllers
                 {
                     if (_bonusViewsBuilder != null)
                         _playerTakeBonusesView.SetInitialized(i,
-                            _bonusViewsBuilder.GetBonusIcon(Model.TakingBonuses[i]),
-                            Model.TakingBonuses[i].CountOfUses.Value);
+                            _bonusViewsBuilder.GetBonusIcon(_model.TakingBonuses[i]),
+                            _model.TakingBonuses[i].CountOfUses.Value);
                 }
             }
 
-            Model.Hp.OnChange += OnHpChanged;
-            Model.Damage.OnChange += OnDmgChanged;
+            _model.Hp.OnChange += OnHpChanged;
+            _model.Damage.OnChange += OnDmgChanged;
 
-            OnHpChanged(Model.Hp.Value);
-            OnDmgChanged(Model.Damage.Value);
+            OnHpChanged(_model.Hp.Value);
+            OnDmgChanged(_model.Damage.Value);
         }
 
         public void SetGridController(GridController gridController)
@@ -75,18 +76,33 @@ namespace ConnectionLost.Controllers
 
         public void AttackEnemy(EnemyBase enemy, HexCoordinates coords)
         {
-            for (var i = 0; i < Model.TakingBonuses.Length; i++)
+            for (var i = 0; i < _model.TakingBonuses.Length; i++)
             {
-                var bonus = Model.TakingBonuses[i];
+                var bonus = _model.TakingBonuses[i];
                 if (bonus is not { IsActive: true }) continue;
                 switch (bonus)
                 {
                     case HawkEyeBonus eye:
-                        eye.AttackedEnemyCoordinates = coords;
                         bonus.IsActive = false;
-                        _gridController.ActivateHawkEye(eye, enemy);
 
+                        _gridController.OnEndOfPlayerTurn +=
+                            () => eye.AttackEnemy(enemy);
+
+                        eye.CountOfUses.OnChange += (int countOfUse) =>
+                        {
+                            if (countOfUse <= 0)
+                            {
+                                _gridController.OnEndOfPlayerTurn -=
+                                    () => eye.AttackEnemy(enemy);
+                                int index = i * 1;
+                                RemoveBonus(index);
+                            }
+                        };
                         return;
+
+                    case RepairBonus repair:
+
+
                     case HalfHpBonus:
                         RemoveBonus(i);
                         enemy.TakeDamage(enemy.Hp.Value / 2f);
@@ -94,17 +110,14 @@ namespace ConnectionLost.Controllers
                 }
             }
 
-
-
-
-            enemy.TakeDamage(Model.Damage.Value);
+            enemy.TakeDamage(_model.Damage.Value);
 
 
             if (!(enemy.Hp.Value > 0)) return;
             {
-                for (var i = 0; i < Model.TakingBonuses.Length; i++)
+                for (var i = 0; i < _model.TakingBonuses.Length; i++)
                 {
-                    var bonus = Model.TakingBonuses[i];
+                    var bonus = _model.TakingBonuses[i];
                     if (bonus is not ShieldBonus || !bonus.IsActive) continue;
                     bonus.CountOfUses--;
 
@@ -116,17 +129,17 @@ namespace ConnectionLost.Controllers
                     return;
                 }
 
-                Model.Hp -= enemy.Dmg;
+                _model.Hp -= enemy.Dmg;
             }
         }
 
 
         public bool TryTakeBonus(BonusBase bonus)
         {
-            for (var i = 0; i < Model.TakingBonuses.Length; i++)
+            for (var i = 0; i < _model.TakingBonuses.Length; i++)
             {
-                if (Model.TakingBonuses[i] != null) continue;
-                Model.TakingBonuses[i] = bonus;
+                if (_model.TakingBonuses[i] != null) continue;
+                _model.TakingBonuses[i] = bonus;
                 bonus.IndexInPlayerBonuses = i;
                 _playerTakeBonusesView.SetInitialized(i, _bonusViewsBuilder.GetBonusIcon(bonus), bonus.CountOfUses.Value);
                 bonus.CountOfUses.OnChange += x =>
@@ -141,7 +154,7 @@ namespace ConnectionLost.Controllers
 
         public void RemoveBonus(int index)
         {
-            Model.TakingBonuses[index] = null;
+            _model.TakingBonuses[index] = null;
             _playerTakeBonusesView.ClearBonus(index);
         }
 
@@ -163,28 +176,39 @@ namespace ConnectionLost.Controllers
         {
             var attackModification = _attackDeBuff * GameConfig.SuppressorDeBuffValuePerLevel;
 
-            Model.Damage -= attackModification;
+            _model.Damage -= attackModification;
 
-            if (Model.Damage < GameConfig.PlayerMinPower)
+            if (_model.Damage < GameConfig.PlayerMinPower)
             {
-                Model.Damage.Value = GameConfig.PlayerMinPower;
+                _model.Damage.Value = GameConfig.PlayerMinPower;
             }
         }
 
 
         internal void ActivateBonus(int index)
         {
-            if (Model.TakingBonuses[index] == null || Model.TakingBonuses[index].IsActive)
+            if (_model.TakingBonuses[index] == null || _model.TakingBonuses[index].IsActive)
                 return;
 
-            var bonus = Model.TakingBonuses[index];
+            var bonus = _model.TakingBonuses[index];
 
             bonus.IsActive = true;
 
             if (bonus is RepairBonus repair)
             {
-                bonus.CountOfUses--;
-                Model.Hp += Mathf.Round(UnityEngine.Random.Range(repair.MinHealValue, repair.MaxHealValue));
+                repair.RepairPlayer(_model);
+                _gridController.OnEndOfPlayerTurn +=
+                    () => repair.RepairPlayer(_model);
+
+                repair.CountOfUses.OnChange += (int countOfUse) =>
+                {
+                    if (countOfUse <= 0)
+                    {
+                        _gridController.OnEndOfPlayerTurn -=
+                            () => repair.RepairPlayer(_model);
+                        RemoveBonus(index);
+                    }
+                };
             }
 
             if (bonus.CountOfUses <= 0)
@@ -203,8 +227,8 @@ namespace ConnectionLost.Controllers
 
         public void Dispose()
         {
-            Model.Hp.OnChange -= OnHpChanged;
-            Model.Damage.OnChange -= OnDmgChanged;
+            _model.Hp.OnChange -= OnHpChanged;
+            _model.Damage.OnChange -= OnDmgChanged;
         }
 
 

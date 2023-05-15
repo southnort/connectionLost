@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44402242, g: 0.49316543, b: 0.5722324, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1649,10 +1649,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1632849450}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7994b8d35f5d32e4d9988b4c1f012e3a, type: 3}
+  m_Script: {fileID: 11500000, guid: 3888d64810a2b8f41919800a58b13fe8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawner: {fileID: 1632849455}
+  gridController: {fileID: 1632849453}
 --- !u!4 &1632849452
 Transform:
   m_ObjectHideFlags: 0
@@ -1677,11 +1677,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1632849450}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 395318a2975929d41b151b17c702c622, type: 3}
+  m_Script: {fileID: 11500000, guid: 9eed66b1af99f1c4db8b93033ba2930d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   enemySpawner: {fileID: 1632849454}
-  bonusBuilder: {fileID: 1632849457}
+  bonusBuilder: {fileID: 1632849455}
+  uiManager: {fileID: 1805719623}
 --- !u!114 &1632849454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1713,11 +1714,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1632849450}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb60609ca63d19748b1c33498acaaad4, type: 3}
+  m_Script: {fileID: 11500000, guid: a3b72af7b0919924cb3f8678f3332e3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellPrefab: {fileID: 6395672230271168164, guid: 1c25c1007e65dd44faaf4fa4013202b6, type: 3}
-  linePrefab: {fileID: 3441832990368726148, guid: e14a4f7c688cef346a0ecd0e63b413bf, type: 3}
+  baseBonusPrefab: {fileID: 9198166097744836882, guid: 8a0ddfc7981ec674cafcf4c836d29203, type: 3}
+  bonusViewSprites:
+  - {fileID: 21300000, guid: 855c387cfd4fd0b40b97123936a29b28, type: 3}
+  - {fileID: 21300000, guid: aa11878d6c56adf47b6f0a8bf7d451a4, type: 3}
+  - {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!114 &1632849456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1727,10 +1736,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1632849450}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7eefdd8bb338bbd41b75dae990b1863b, type: 3}
+  m_Script: {fileID: 11500000, guid: 86493de4f57a609478cc2ffeabeebffe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridController: {fileID: 1632849453}
+  spawner: {fileID: 1632849457}
 --- !u!114 &1632849457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1740,17 +1749,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1632849450}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2860177140723264db60f9347b4522fb, type: 3}
+  m_Script: {fileID: 11500000, guid: e4b1d7bed21b31b438e1880a7651029c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseBonusPrefab: {fileID: 9198166097744836882, guid: 8a0ddfc7981ec674cafcf4c836d29203, type: 3}
-  bonusViewSprites:
-  - {fileID: 21300000, guid: 70e3ce8ad01f39248a3ea97a35bcf238, type: 3}
-  - {fileID: 21300000, guid: a3e491f99ea3ad74f8731ca93e84c497, type: 3}
-  - {fileID: 21300000, guid: 77a39e873655d3c4b93d0b7696397b83, type: 3}
-  - {fileID: 21300000, guid: 13527793884104b46b7446fd7464c3ed, type: 3}
-  - {fileID: 21300000, guid: 68fafd0a2acc3774988418f657bf7b68, type: 3}
-  - {fileID: 21300000, guid: 8a6cca56e2b63344eb4769cd92d93ffb, type: 3}
+  cellPrefab: {fileID: 6395672230271168164, guid: 1c25c1007e65dd44faaf4fa4013202b6, type: 3}
+  linePrefab: {fileID: 3441832990368726148, guid: e14a4f7c688cef346a0ecd0e63b413bf, type: 3}
 --- !u!1 &1688205384
 GameObject:
   m_ObjectHideFlags: 0
@@ -2200,11 +2203,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8569abb859741f4692184d82e661916, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridBuilder: {fileID: 1632849451}
+  gridBuilder: {fileID: 1632849456}
   gridController: {fileID: 1632849453}
   playerStateView: {fileID: 1044130943}
   playerTakingBonusesView: {fileID: 792993061}
-  uiManager: {fileID: 1805719623}
 --- !u!4 &2112028000
 Transform:
   m_ObjectHideFlags: 0
