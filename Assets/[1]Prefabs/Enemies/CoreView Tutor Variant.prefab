@@ -10,10 +10,22 @@ PrefabInstance:
     - target: {fileID: 4981342827330585308, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 3168140d6f409d0448447f18568d9482, type: 3}
+      objectReference: {fileID: 21300000, guid: f42d5c27cef4447e48072ee949dfd167, type: 3}
+    - target: {fileID: 4981342827330585308, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
+      propertyPath: m_Color.b
+      value: 0.66363716
+      objectReference: {fileID: 0}
+    - target: {fileID: 4981342827330585308, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4981342827330585308, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7835822672925503805, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
       propertyPath: m_Name
-      value: CoreView Tutor
+      value: CoreView Tutor Variant
       objectReference: {fileID: 0}
     - target: {fileID: 7970312544691917731, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
       propertyPath: m_RootOrder

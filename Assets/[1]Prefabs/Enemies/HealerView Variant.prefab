@@ -7,10 +7,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4536675203794119459, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 14.3966
+      objectReference: {fileID: 0}
+    - target: {fileID: 4536675203794119459, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 14.3966
+      objectReference: {fileID: 0}
     - target: {fileID: 4981342827330585308, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: be340a165cb9c8d4cb50f1deeb51d4ea, type: 3}
+      objectReference: {fileID: 21300000, guid: 442d75636af304e5eb2641de386fcb83, type: 3}
+    - target: {fileID: 4981342827330585308, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
+      propertyPath: m_Color.b
+      value: 0.7490196
+      objectReference: {fileID: 0}
+    - target: {fileID: 4981342827330585308, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
+      propertyPath: m_Color.r
+      value: 0.38039216
+      objectReference: {fileID: 0}
+    - target: {fileID: 4981342827330585308, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7835822672925503805, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
       propertyPath: m_Name
       value: HealerView Variant

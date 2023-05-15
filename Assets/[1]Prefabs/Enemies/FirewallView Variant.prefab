@@ -7,13 +7,37 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4536675203794119459, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 18.7721
+      objectReference: {fileID: 0}
+    - target: {fileID: 4536675203794119459, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 25.9243
+      objectReference: {fileID: 0}
     - target: {fileID: 4981342827330585308, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: affeade9874cf2347abb155e8d0db4d8, type: 3}
+      objectReference: {fileID: 21300000, guid: 3efa6382eb124487c99af0c025ed820a, type: 3}
+    - target: {fileID: 4981342827330585308, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
+      propertyPath: m_Color.b
+      value: 0.7509075
+      objectReference: {fileID: 0}
+    - target: {fileID: 4981342827330585308, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4981342827330585308, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
+      propertyPath: m_Color.r
+      value: 0.3803922
+      objectReference: {fileID: 0}
+    - target: {fileID: 4981342827330585308, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7835822672925503805, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
       propertyPath: m_Name
-      value: FirewallView
+      value: FirewallView Variant
       objectReference: {fileID: 0}
     - target: {fileID: 7970312544691917731, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
       propertyPath: m_RootOrder

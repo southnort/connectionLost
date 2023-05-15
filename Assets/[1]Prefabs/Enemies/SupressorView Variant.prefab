@@ -7,10 +7,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4536675203794119459, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 16.5594
+      objectReference: {fileID: 0}
+    - target: {fileID: 4536675203794119459, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 16.5594
+      objectReference: {fileID: 0}
     - target: {fileID: 4981342827330585308, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: f82dfc5fc3c5a8f4080a3550427019c8, type: 3}
+      objectReference: {fileID: 21300000, guid: 5e93d2777efca43c280395899be3b1bd, type: 3}
+    - target: {fileID: 4981342827330585308, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
+      propertyPath: m_Color.b
+      value: 0.7490196
+      objectReference: {fileID: 0}
+    - target: {fileID: 4981342827330585308, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
+      propertyPath: m_Color.r
+      value: 0.38039216
+      objectReference: {fileID: 0}
     - target: {fileID: 7835822672925503805, guid: 2d32dd2a17dab394b84b1d7227694625, type: 3}
       propertyPath: m_Name
       value: SupressorView Variant
